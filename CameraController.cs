@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
         if (!string.IsNullOrEmpty(ArduinoDataManager.Instance.JoystickDirection))
         {
             MoveCamera(ArduinoDataManager.Instance.JoystickDirection);
-            ArduinoDataManager.Instance.ResetButtonStates(); // Reset the joystick direction state
+            ArduinoDataManager.Instance.ResetButtonStates();
         }
     }
 

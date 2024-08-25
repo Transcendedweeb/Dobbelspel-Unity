@@ -5,9 +5,11 @@ using TMPro;
 public class CenterCameraHandler : MonoBehaviour
 {
     public GameObject canvasIdle;
+    public GameObject canvasEvent;
     public GameObject canvasMenu;
     public GameObject menuText1;
     public GameObject menuText2;
+    public GameObject dealer;
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
@@ -15,8 +17,22 @@ public class CenterCameraHandler : MonoBehaviour
     GameObject[] arrayText2;
     GameObject selectedGameObject;
 
+    void ResetVars()
+    {
+        sceneCount = 0;
+        menuIndexCount = 0;
+        isHandlingButtonPress = false;
+        InitializeMenu(arrayText1);
+        menuText1.SetActive(true);
+        canvasIdle.SetActive(true);
+        canvasMenu.SetActive(false);
+        canvasEvent.SetActive(false);
+    }
+
     GameObject[] GetChildren(GameObject parent)
     {
+        if (parent == null) return new GameObject[0];
+        
         Transform[] childrenTransforms = parent.GetComponentsInChildren<Transform>(true);
         GameObject[] children = new GameObject[childrenTransforms.Length - 1];
 
@@ -35,6 +51,7 @@ public class CenterCameraHandler : MonoBehaviour
         canvasIdle.SetActive(false);
         canvasMenu.SetActive(true);
         sceneCount++;
+        InitializeMenu(arrayText1);
     }
 
     void SendDobbelMessage()
@@ -46,7 +63,7 @@ public class CenterCameraHandler : MonoBehaviour
     void GoBack()
     {
         ArduinoDataManager.Instance.ButtonBPressed = false;
-        switch(sceneCount)
+        switch (sceneCount)
         {
             case 1:
                 canvasIdle.SetActive(true);
@@ -57,6 +74,7 @@ public class CenterCameraHandler : MonoBehaviour
                 menuText1.SetActive(true);
                 menuText2.SetActive(false);
                 sceneCount--;
+                InitializeMenu(arrayText1);
                 break;
             default:
                 break;
@@ -66,37 +84,70 @@ public class CenterCameraHandler : MonoBehaviour
     void MoveToIndexCount()
     {
         ArduinoDataManager.Instance.ButtonAPressed = false;
-        switch (menuIndexCount)
+        if (sceneCount == 1)
         {
-            case 0:
-                if (sceneCount == 2)
-                {
-                    Debug.Log("Mission");
-                }
-                else
-                {
+            switch (menuIndexCount)
+            {
+                case 0:
                     Debug.Log("Event");
-                }
-                break;
-            case 1:
-                menuText1.SetActive(false);
-                menuText2.SetActive(true);
-                sceneCount++;
-                menuIndexCount = 0;  // Reset index count when moving to the new menu
-                selectedGameObject = arrayText2[0];
-                SetTransparency(selectedGameObject, 1f);  // Set first item as selected
-                break;
-            case 2:
-                break;
-            default:
-                break;
+                    menuText1.SetActive(false);
+                    canvasEvent.SetActive(true);
+                    this.enabled = false;
+                    break;
+                case 1:
+                    Debug.Log("Mission menu");
+                    menuText1.SetActive(false);
+                    menuText2.SetActive(true);
+                    sceneCount++;
+                    InitializeMenu(arrayText2);
+                    break;
+                case 2:
+                    Debug.Log("Dealer");
+                    dealer.SetActive(true);
+                    this.gameObject.SetActive(false);
+                    break;
+                default:
+                    break;
+            }
         }
+        else
+        {
+            switch (menuIndexCount)
+            {
+                case 0:
+                    Debug.Log("TEST");
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    void InitializeMenu(GameObject[] menuArray)
+    {
+        if (menuArray == null || menuArray.Length == 0) return;
+        
+        menuIndexCount = 0;
+        for (int i = 0; i < menuArray.Length; i++)
+        {
+            if (menuArray[i] != null)
+            {
+                SetTransparency(menuArray[i], i == 0 ? 1f : 100 / 255f);
+            }
+        }
+        selectedGameObject = menuArray.Length > 0 ? menuArray[0] : null;
     }
 
     IEnumerator HandleMenuNavigation(GameObject[] menuArray)
     {
         isHandlingButtonPress = true;
         string joystickDirection = ArduinoDataManager.Instance.JoystickDirection;
+
+        if (menuArray == null || menuArray.Length == 0) yield break;
 
         if (joystickDirection == "Up" && menuIndexCount != 0)
         {
@@ -122,6 +173,8 @@ public class CenterCameraHandler : MonoBehaviour
 
     void SetTransparency(GameObject obj, float alpha)
     {
+        if (obj == null) return;
+        
         TMP_Text textMesh = obj.GetComponent<TMP_Text>();
         if (textMesh != null)
         {
@@ -133,11 +186,15 @@ public class CenterCameraHandler : MonoBehaviour
 
     void Start()
     {
-        arrayText1 = GetChildren(menuText1);
-        arrayText2 = GetChildren(menuText2);
+        if (menuText1 != null) arrayText1 = GetChildren(menuText1);
+        if (menuText2 != null) arrayText2 = GetChildren(menuText2);
 
-        selectedGameObject = arrayText1[0];
-        SetTransparency(selectedGameObject, 1f);  // Highlight the first menu item by default
+        InitializeMenu(arrayText1);
+    }
+
+    void OnEnable()
+    {
+        ResetVars();
     }
 
     void Update()
@@ -166,6 +223,10 @@ public class CenterCameraHandler : MonoBehaviour
                 else if (ArduinoDataManager.Instance.ButtonBPressed)
                 {
                     GoBack();
+                }
+                else if (ArduinoDataManager.Instance.ButtonAPressed)
+                {
+                    MoveToIndexCount();
                 }
                 break;
             case 3:

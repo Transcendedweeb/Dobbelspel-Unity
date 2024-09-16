@@ -240,6 +240,11 @@ public class CenterCameraHandler : MonoBehaviour
                 {
                     SendDobbelMessage();
                 }
+                else if (ArduinoDataManager.Instance.ButtonCPressed)
+                {
+                    Debug.Log("C - Arena");
+
+                }
                 break;
         }
     }

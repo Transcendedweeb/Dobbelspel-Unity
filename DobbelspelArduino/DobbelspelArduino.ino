@@ -1,13 +1,18 @@
 const int buttonPin1 = 2;
 int buttonState1 = 0;
-int lastButtonState1 = HIGH;  // previous state of the button
+int lastButtonState1 = HIGH;  // previous state of button 1
 unsigned long lastDebounceTime1 = 0;
-unsigned long debounceDelay = 50; // the debounce time; increase if the output flickers
+unsigned long debounceDelay = 50; // debounce time
 
 const int buttonPin2 = 3;
 int buttonState2 = 0;
-int lastButtonState2 = HIGH;
+int lastButtonState2 = HIGH;  // previous state of button 2
 unsigned long lastDebounceTime2 = 0;
+
+const int buttonPin3 = 5;     // New button on pin 5
+int buttonState3 = 0;
+int lastButtonState3 = HIGH;  // previous state of button 3
+unsigned long lastDebounceTime3 = 0;
 
 const int VRx = A0; // Joystick X-axis pin
 const int VRy = A1; // Joystick Y-axis pin
@@ -16,6 +21,7 @@ const int SW = 4;   // Joystick button pin
 void setup() {
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
+  pinMode(buttonPin3, INPUT_PULLUP); // New button on pin 5
   pinMode(SW, INPUT_PULLUP); // Joystick button
 
   Serial.begin(9600);
@@ -53,6 +59,22 @@ void loop() {
     }
   }
   lastButtonState2 = reading2;
+
+  // Debounce button 3 (new button)
+  int reading3 = digitalRead(buttonPin3);
+  if (reading3 != lastButtonState3) {
+    lastDebounceTime3 = millis();
+  }
+
+  if ((millis() - lastDebounceTime3) > debounceDelay) {
+    if (reading3 != buttonState3) {
+      buttonState3 = reading3;
+      if (buttonState3 == LOW) {
+        Serial.println("C");
+      }
+    }
+  }
+  lastButtonState3 = reading3;
 
   // Handle joystick inputs as before...
   int joyButtonState = digitalRead(SW);

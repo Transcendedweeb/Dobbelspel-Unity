@@ -10,12 +10,14 @@ public class CenterCameraHandler : MonoBehaviour
     public GameObject menuText1;
     public GameObject menuText2;
     public GameObject dealer;
+    public GameObject colloseum;
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
     GameObject[] arrayText1;
     GameObject[] arrayText2;
     GameObject selectedGameObject;
+    ChangeCamera changeCamera;
 
     void ResetVars()
     {
@@ -103,8 +105,7 @@ public class CenterCameraHandler : MonoBehaviour
                     break;
                 case 2:
                     Debug.Log("Dealer");
-                    dealer.SetActive(true);
-                    this.gameObject.SetActive(false);
+                    changeCamera.ChangeToSpecificCam(dealer);
                     break;
                 default:
                     break;
@@ -189,12 +190,18 @@ public class CenterCameraHandler : MonoBehaviour
         if (menuText1 != null) arrayText1 = GetChildren(menuText1);
         if (menuText2 != null) arrayText2 = GetChildren(menuText2);
 
+        changeCamera = this.GetComponent<ChangeCamera>();
         InitializeMenu(arrayText1);
     }
 
     void OnEnable()
     {
         ResetVars();
+        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource audioSrc in allAudioSources)
+        {
+            audioSrc.Stop();
+        }
     }
 
     void Update()
@@ -242,8 +249,9 @@ public class CenterCameraHandler : MonoBehaviour
                 }
                 else if (ArduinoDataManager.Instance.ButtonCPressed)
                 {
+                    ArduinoDataManager.Instance.ButtonCPressed = false;
                     Debug.Log("C - Arena");
-
+                    changeCamera.ChangeToSpecificCam(colloseum);
                 }
                 break;
         }

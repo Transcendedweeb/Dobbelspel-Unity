@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PenaltyHandler : MonoBehaviour
 {
+    public GameObject parentHolder;
+    public GameObject startCamera;
     public GameObject canvas;
     public GameObject shooterArrow;
     public GameObject football;
     public GameObject keeper;
     public GameObject shooter;
 
-    public GameObject backgroundOpponent;
     public GameObject backgroundChallenger;
-    public GameObject textMiss;
-    public GameObject textGoal;
+    public GameObject backgroundOpponent;
+    public GameObject textChallengerTurn;
+    public GameObject textOpponentTurn;
+    public GameObject textChallengerWin;
+    public GameObject textOpponentWin;
 
 
     public int arrowSpeed = 1;
@@ -40,12 +44,16 @@ public class PenaltyHandler : MonoBehaviour
     float arrowPosition;
     bool isArrowMovingUp = true;
     bool shotTaken = false;
-    bool isScored = false;
-
 
     string goalDirection;
     string keeperDirection;
     string shotPosition;
+
+    public AudioClip[] announcerGoal;
+    public AudioClip[] announcerSave;
+    public AudioClip[] announcerMiss;
+    AudioSource audioSource;
+    ChangeCamera changeCamera;
 
     IEnumerator ShootoutLoop()
     {
@@ -59,25 +67,28 @@ public class PenaltyHandler : MonoBehaviour
             }
 
             CheckIfScored();
+            GetAnnouncerClip();
             yield return new WaitForSeconds(4f);
             canvas.SetActive(false);
 
-            // Check for game over
             if (challengerScore == 3 || opponentScore == 3)
             {
                 isGameOver = true;
-                Debug.Log((challengerScore == 3 ? "Challenger" : "Opponent") + " wins the shootout!");
+                if (challengerScore == 3) textChallengerWin.SetActive(true);
+                else textOpponentWin.SetActive(true);
+                ArduinoDataManager.Instance.ResetButtonStates();
+                StartCoroutine(ReturnToMenu());
                 yield break;
             }
             else if (isChallengerTurn)
             {
-                backgroundChallenger.SetActive(true);
+                backgroundOpponent.SetActive(true);
                 SetTransitionText();
                 SetArrowSpeed(opponentScore);
             }
             else
             {
-                backgroundOpponent.SetActive(true);
+                backgroundChallenger.SetActive(true);
                 SetTransitionText();
                 SetArrowSpeed(challengerScore);
             }
@@ -143,7 +154,6 @@ public class PenaltyHandler : MonoBehaviour
         }
         Debug.Log(goalDirection);
 
-        // Simulate goalkeeper choice
         int randomDirection = Random.Range(0, 3);
         if (randomDirection == 0)
             keeperDirection = "Left";
@@ -200,7 +210,6 @@ public class PenaltyHandler : MonoBehaviour
 
     void CheckIfScored()
     {
-        isScored = false;
         if (shotPosition == "green")
         {
             BoxCollider keeperCollider = keeper.GetComponent<BoxCollider>();
@@ -213,7 +222,6 @@ public class PenaltyHandler : MonoBehaviour
             {
                 BoxCollider keeperCollider = keeper.GetComponent<BoxCollider>();
                 keeperCollider.enabled = false;
-                isScored = true;
                 ScoreGoal();
             }
         }
@@ -221,7 +229,6 @@ public class PenaltyHandler : MonoBehaviour
 
     void ScoreGoal()
     {
-        isScored = true;
         if (isChallengerTurn)
         {
             challengerScore++;
@@ -245,9 +252,33 @@ public class PenaltyHandler : MonoBehaviour
         shooterArrow.transform.localPosition = new Vector3(shooterArrow.transform.localPosition.x, arrowPosition, shooterArrow.transform.localPosition.z);
     }
 
+    void ResetGameObjects()
+    {
+        startCamera.SetActive(true);
+        backgroundOpponent.SetActive(true);
+        textOpponentTurn.SetActive(true);
+        canvas.SetActive(true);
+        textChallengerWin.SetActive(false);
+        textOpponentWin.SetActive(false);
+    }
+
+    void ResetVariables()
+    {
+        challengerScore = 0;
+        opponentScore = 0;
+        isGameOver = false;
+
+        arrowPosition = arrowLowerLimit;
+        shotTaken = false;
+        isChallengerTurn = false;
+
+        arrowSpeed = 1;
+    }
+
+
     void ResetFootballPosition()
     {
-        Vector3 originalFootballPosition = new Vector3(14.5f, 18.5f, 199f);  // Replace with the actual starting position
+        Vector3 originalFootballPosition = new Vector3(14.5f, 18.5f, 199f);
         football.transform.position = originalFootballPosition;
 
         Rigidbody ballRigidbody = football.GetComponent<Rigidbody>();
@@ -255,18 +286,13 @@ public class PenaltyHandler : MonoBehaviour
         {
             ballRigidbody.velocity = Vector3.zero;
             ballRigidbody.angularVelocity = Vector3.zero;
-            Debug.Log("Football position reset and motion stopped.");
-        }
-        else
-        {
-            Debug.LogError("The football does not have a Rigidbody component!");
         }
     }
 
     void SetTransitionText()
     {
-        if (isScored) textGoal.SetActive(true);
-        else textMiss.SetActive(true);
+        if (isChallengerTurn) textOpponentTurn.SetActive(true);
+        else textChallengerTurn.SetActive(true);
     }
 
     void SetArrowSpeed(int nextPlayerScore)
@@ -274,20 +300,63 @@ public class PenaltyHandler : MonoBehaviour
         switch (nextPlayerScore)
         {
             case 0:
-                arrowSpeed = 1;
+                arrowSpeed = 2;
                 break;
             case 1:
-                arrowSpeed = 4;
+                arrowSpeed = 6;
                 break;
             default:
-                arrowSpeed = 6;
+                arrowSpeed = 12;
                 break;
         }
     }
 
-
-    void Start()
+    void GetAnnouncerClip()
     {
+        switch(shotPosition)
+        {
+            case "green":
+                PlayAnnouncerClip(announcerGoal);
+                break;
+            case "orange":
+                if (goalDirection != keeperDirection) PlayAnnouncerClip(announcerGoal);
+                else PlayAnnouncerClip(announcerSave);
+                break;
+            default:
+                PlayAnnouncerClip(announcerMiss);
+                break;
+        }
+    }
+
+    void PlayAnnouncerClip(AudioClip[] clipArray)
+    {
+        int randomIndex = Random.Range(0, clipArray.Length);
+        AudioClip randomClip = clipArray[randomIndex];
+
+        audioSource.clip = randomClip;
+        audioSource.Play();
+    }
+
+    IEnumerator ReturnToMenu()
+    {
+        while (!ArduinoDataManager.Instance.ButtonAPressed && !ArduinoDataManager.Instance.ButtonBPressed)
+        {
+            yield return null;
+        }
+
+        ArduinoDataManager.Instance.ResetButtonStates();
+
+        parentHolder.SetActive(false);
+        ResetForNextShot();
+        ResetGameObjects();
+        ResetVariables();
+        changeCamera.ChangeToNextCamera();
+    }
+
+    void OnEnable()
+    {
+        audioSource = this.GetComponent<AudioSource>();
+        changeCamera = this.GetComponent<ChangeCamera>();
         string[] keys = {
             "left green", "left orange", "left red",
             "center green", "center orange", "center red",

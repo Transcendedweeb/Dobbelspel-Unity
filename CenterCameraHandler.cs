@@ -11,6 +11,7 @@ public class CenterCameraHandler : MonoBehaviour
     public GameObject menuText2;
     public GameObject dealer;
     public GameObject colloseum;
+    public GameObject roulette;
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
@@ -252,6 +253,18 @@ public class CenterCameraHandler : MonoBehaviour
                     ArduinoDataManager.Instance.ButtonCPressed = false;
                     Debug.Log("C - Arena");
                     changeCamera.ChangeToSpecificCam(colloseum);
+                }
+                else if (ArduinoDataManager.Instance.ButtonDPressed)
+                {
+                    ArduinoDataManager.Instance.ButtonDPressed = false;
+                    Debug.Log("D - Roulette");
+                    changeCamera.ChangeToSpecificCam(roulette);
+                }
+                else if (ArduinoDataManager.Instance.ButtonEPressed)
+                {
+                    ArduinoDataManager.Instance.ButtonEPressed = false;
+                    Debug.Log("E - Casino");
+                    changeCamera.ChangeToSpecificCam(roulette);
                 }
                 break;
         }

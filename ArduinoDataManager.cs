@@ -7,6 +7,7 @@ public class ArduinoDataManager : MonoBehaviour
     public bool ButtonAPressed { get; set; }
     public bool ButtonBPressed { get; set; }
     public bool ButtonCPressed { get; set; }
+    public bool ButtonDPressed { get; set; }
     public bool JoystickButtonPressed { get; set; }
     public string JoystickDirection { get; set; }
 
@@ -37,6 +38,10 @@ public class ArduinoDataManager : MonoBehaviour
         {
             ButtonCPressed = true;
         }
+        else if (message == "D")
+        {
+            ButtonDPressed = true;
+        }
         else if (message == "Joystick Button Pressed")
         {
             JoystickButtonPressed = true;
@@ -52,6 +57,7 @@ public class ArduinoDataManager : MonoBehaviour
         ButtonAPressed = false;
         ButtonBPressed = false;
         ButtonCPressed = false;
+        ButtonDPressed = false;
         JoystickButtonPressed = false;
         JoystickDirection = null;
     }

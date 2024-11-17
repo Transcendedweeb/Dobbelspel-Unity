@@ -70,7 +70,7 @@ void loop() {
     if (reading3 != buttonState3) {
       buttonState3 = reading3;
       if (buttonState3 == LOW) {
-        Serial.println("D");
+        Serial.println("E");
       }
     }
   }

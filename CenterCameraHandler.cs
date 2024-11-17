@@ -12,6 +12,7 @@ public class CenterCameraHandler : MonoBehaviour
     public GameObject dealer;
     public GameObject colloseum;
     public GameObject roulette;
+    public GameObject casino;
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
@@ -264,7 +265,7 @@ public class CenterCameraHandler : MonoBehaviour
                 {
                     ArduinoDataManager.Instance.ButtonEPressed = false;
                     Debug.Log("E - Casino");
-                    changeCamera.ChangeToSpecificCam(roulette);
+                    changeCamera.ChangeToSpecificCam(casino);
                 }
                 break;
         }

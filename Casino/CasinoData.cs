@@ -58,7 +58,7 @@ public class CasinoData : MonoBehaviour
         }
 
         createQuestions.Load();
-        LogQuizData(); 
+        // LogQuizData();
     }
 
     // Method to add a question to the quiz data

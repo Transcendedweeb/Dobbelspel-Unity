@@ -8,9 +8,12 @@ public class CasinoUi : MonoBehaviour
     GetQuestion getQuestion;
     WriteQuestionOnScreen wq;
     public GameObject[] menuOptions;
-    int currentIndex = 0;
+    public int currentIndex = 0;
     bool isHandlingInput = false;
+    bool infoMenu = false;
     public float inputCooldown = 0.5f;
+    public GameObject selectionUi;
+    public GameObject infoUi;
 
     void Start()
     {
@@ -32,8 +35,6 @@ public class CasinoUi : MonoBehaviour
 
     void Update()
     {
-        // if (isHandlingInput) return;
-
         string joystickDirection = ArduinoDataManager.Instance.JoystickDirection;
 
         if (!string.IsNullOrEmpty(joystickDirection))
@@ -53,10 +54,26 @@ public class CasinoUi : MonoBehaviour
             ResetJoystick();
         }
 
-        if (ArduinoDataManager.Instance.ButtonAPressed)
+        if (ArduinoDataManager.Instance.ButtonAPressed && !infoMenu)
         {
-            ArduinoDataManager.Instance.ButtonAPressed = false;
+            ArduinoDataManager.Instance.ResetButtonStates();
             SelectOption();
+        }
+        else if (ArduinoDataManager.Instance.ButtonBPressed)
+        {
+            ArduinoDataManager.Instance.ResetButtonStates();
+            if (!infoMenu)
+            {
+                infoMenu = true;
+                selectionUi.SetActive(false);
+                infoUi.SetActive(true);
+            }
+            else
+            {
+                infoMenu = false;
+                selectionUi.SetActive(true);
+                infoUi.SetActive(false);
+            }
         }
     }
 

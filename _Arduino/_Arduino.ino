@@ -77,23 +77,32 @@ void loop() {
   lastButtonState3 = reading3;
 
   // Handle joystick inputs as before...
-  int joyButtonState = digitalRead(SW);
-  if (joyButtonState == LOW) {
-    Serial.println("Joystick Button Pressed");
-  }
-
   int xValue = analogRead(VRx);
   int yValue = analogRead(VRy);
+  String joystickMsg = "";
 
   if (xValue < 400) {
-    Serial.println("Left");
-  } else if (xValue > 600) {
-    Serial.println("Right");
+    joystickMsg = "Left";
+  } 
+  else if (xValue > 600) {
+    joystickMsg = "Right";
+  }
+  else
+  {
+    joystickMsg = "";
   }
 
   if (yValue < 400) {
-    Serial.println("Up");
-  } else if (yValue > 600) {
-    Serial.println("Down");
+    joystickMsg += "Up";
+  } 
+  else if (yValue > 600) {
+    joystickMsg += "Down";
+  }
+
+  if (joystickMsg != "") {
+    Serial.println(joystickMsg);
+  }
+  else{
+    Serial.println("");
   }
 }

@@ -51,9 +51,17 @@ public class ArduinoDataManager : MonoBehaviour
         {
             JoystickButtonPressed = true;
         }
+        else if (message == "LeftUp" || message == "LeftDown" || message == "RightUp" || message == "RightDown")
+        {
+            JoystickDirection = message;
+        }
         else if (message == "Left" || message == "Right" || message == "Up" || message == "Down")
         {
             JoystickDirection = message;
+        }
+        else if (message == "")
+        {
+            JoystickDirection = null;
         }
     }
 

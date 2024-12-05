@@ -11,27 +11,27 @@ public class DodgeRoll : MonoBehaviour
     bool trigger;
     bool rolling = false;
     PcMovement pcMovement;
-    private CharacterController characterController; // Add a reference to CharacterController
+    private CharacterController characterController;
 
     void Start()
     {
         trigger = this.GetComponent<PcShoot>().triggerRelease;
         pcMovement = this.GetComponent<PcMovement>();
-        characterController = GetComponent<CharacterController>(); // Get the CharacterController component
+        characterController = GetComponent<CharacterController>();
     }
 
     void FixedUpdate()
     {
-        if (ArduinoDataManager.Instance.ButtonBPressed && !rolling)
+        if (ArduinoDataManager.Instance.ButtonBPressed)
         {
             ArduinoDataManager.Instance.ResetButtonStates();
 
-            if (!trigger)
+            if (!trigger && !rolling)
             {
                 rolling = true;
                 pcMovement.enabled = false;
                 this.GetComponent<PcShoot>().enabled = false;
-                this.GetComponent<BoxCollider>().enabled = false;
+                this.GetComponent<HealthManager>().enabled = false;
                 Roll();
             }
         }
@@ -43,15 +43,13 @@ public class DodgeRoll : MonoBehaviour
         pcMovement.enabled = true;
         rolling = false;
         this.GetComponent<PcShoot>().enabled = true;
-        this.GetComponent<BoxCollider>().enabled = true;
+        this.GetComponent<HealthManager>().enabled = true;
         model.transform.localEulerAngles = new Vector3(5, 12, 0);
     }
 
     void Roll()
     {
         Vector3 rollDirection = Vector3.zero;
-
-        // Set roll direction based on last movement direction
         if (pcMovement.lastMov == "RightUp")
         {
             rollDirection = (transform.right + transform.forward).normalized;

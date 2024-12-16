@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CenterCameraHandler : MonoBehaviour
 {
@@ -118,13 +119,16 @@ public class CenterCameraHandler : MonoBehaviour
             switch (menuIndexCount)
             {
                 case 0:
-                    Debug.Log("TEST");
+                    SceneManager.LoadScene("Mission 1 - space");
                     break;
                 case 1:
+                    SceneManager.LoadScene("Mission 2 - snow");
                     break;
                 case 2:
+                    SceneManager.LoadScene("Mission 3 - water");
                     break;
-                default:
+                case 3:
+                    SceneManager.LoadScene("Mission 4 - desert");
                     break;
             }
         }
@@ -152,7 +156,7 @@ public class CenterCameraHandler : MonoBehaviour
 
         if (menuArray == null || menuArray.Length == 0) yield break;
 
-        if (joystickDirection == "Up" && menuIndexCount != 0)
+        if ((joystickDirection == "Up" || joystickDirection == "RightUp" || joystickDirection == "LeftUp") && menuIndexCount != 0)
         {
             SetTransparency(menuArray[menuIndexCount], 100 / 255f);
             menuIndexCount--;
@@ -160,7 +164,7 @@ public class CenterCameraHandler : MonoBehaviour
             SetTransparency(menuArray[menuIndexCount], 1f);
             Debug.Log(selectedGameObject);
         }
-        else if (joystickDirection == "Down" && menuIndexCount != menuArray.Length - 1)
+        else if ((joystickDirection == "Down" || joystickDirection == "LeftDown" || joystickDirection == "RightDown")  && menuIndexCount != menuArray.Length - 1)
         {
             SetTransparency(menuArray[menuIndexCount], 100 / 255f);
             menuIndexCount++;

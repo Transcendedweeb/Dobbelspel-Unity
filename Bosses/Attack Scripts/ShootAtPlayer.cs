@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PirateShot : MonoBehaviour
+public class ShootAtPlayer : MonoBehaviour
 {
     public GameObject prefab;
     public GameObject muzzle;
@@ -10,6 +10,9 @@ public class PirateShot : MonoBehaviour
     public float waitTime = 1f;
     public float reactionTime = 1f;
     public float shotTime = 1f;
+    public float projectileCount = 1f;
+    public string animName = "";
+    public bool quickReset = false;
     public BossAI bossAI;
     public Animator animator;
     ChangeEffectColor changeEffectColor;
@@ -25,13 +28,14 @@ public class PirateShot : MonoBehaviour
         changeEffectColor = playerMarker.GetComponent<ChangeEffectColor>();
         changeEffectColor.effectColor = Color.white;
         changeEffectColor.ApplyColorToChildren();
+        if (quickReset) bossAI.InvokeReset();
         playerMarker.SetActive(true);
         StartCoroutine(Main());
     }
 
     IEnumerator Main()
     {
-        animator.SetBool("Aiming", true);
+        if (animName != "") animator.SetBool(animName, true);
         yield return new WaitForSeconds(waitTime);
 
         changeEffectColor.effectColor = Color.red;
@@ -39,14 +43,21 @@ public class PirateShot : MonoBehaviour
 
         yield return new WaitForSeconds(reactionTime);
 
-        Vector3 spawnPosition = muzzle.transform.position;
-        Quaternion spawnRotation = Quaternion.LookRotation(playerMarker.transform.position - muzzle.transform.position);
-        Instantiate(prefab, spawnPosition, spawnRotation);
+        for (int i = 0; i < projectileCount; i++)
+        {
+            Vector3 spawnPosition = muzzle.transform.position;
+            Quaternion spawnRotation = Quaternion.LookRotation(playerMarker.transform.position - muzzle.transform.position);
+            Instantiate(prefab, spawnPosition, spawnRotation);
+            yield return new WaitForSeconds(shotTime);
+        }
 
-        yield return new WaitForSeconds(shotTime);
+        End();
+    }
 
-        animator.SetBool("Aiming", false);
-        bossAI.InvokeReset();
+    void End()
+    {
+        if (animName != "") animator.SetBool(animName, false);
+        if (!quickReset) bossAI.InvokeReset();
         playerMarker.SetActive(false);
         this.gameObject.SetActive(false);
     }

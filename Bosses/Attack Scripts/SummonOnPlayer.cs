@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class SummonOnPlayer : MonoBehaviour
 {
+    public GameObject boss;
     public GameObject prefab;
     public GameObject player;
-    public BossAI bossAI;
     public float initialWaitTime = 0f;
     public int projectileCount = 1;
     public float cooldown = 0f;
     public float fixedYPosition = 0f;
+    public string animTriggerName = "";
+    public bool quickReset = false;
+    BossAI bossAI;
+    Animator animator;
 
     void OnEnable()
     {
+        bossAI = boss.GetComponent<BossAI>();
+        animator = boss.GetComponent<Animator>();
+        if (quickReset) bossAI.InvokeReset();
         Invoke(nameof(StartCoroutineCall), initialWaitTime);
     }
 
@@ -24,6 +31,7 @@ public class SummonOnPlayer : MonoBehaviour
 
     IEnumerator Main()
     {
+        if (animTriggerName != "") animator.SetTrigger(animTriggerName);
         for (int i = 0; i < projectileCount; i++)
         {
             Vector3 spawnPosition = new Vector3(
@@ -37,7 +45,7 @@ public class SummonOnPlayer : MonoBehaviour
             yield return new WaitForSeconds(cooldown);
         }
 
-        bossAI.InvokeReset();
+        if (!quickReset) bossAI.InvokeReset();
         this.gameObject.SetActive(false);
     }
 }

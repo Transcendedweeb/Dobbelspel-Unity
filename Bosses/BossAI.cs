@@ -10,6 +10,7 @@ public class BossAI : MonoBehaviour
     public GameObject player;
     public float closeDistance = 5f;
     public float attackCooldown = 0f;
+    public float starWaitTime = 0f;
     [HideInInspector] public bool attacking = true;
     int count;
     bool specialActivated = false;
@@ -17,7 +18,7 @@ public class BossAI : MonoBehaviour
 
     void Start()
     {
-        InvokeReset();
+        Invoke("InvokeReset", starWaitTime);
         count = attacks.Length-1;
         healthManager = this.gameObject.GetComponent<HealthManager>();
     }
@@ -32,7 +33,6 @@ public class BossAI : MonoBehaviour
             {
                 if (healthManager.health < (healthManager.maxHealth/2))
                 {
-                    Debug.LogError("Health boss under 50%. Special attack!");
                     specialActivated = true;
                     special.SetActive(true);
                     attacking = true;
@@ -42,12 +42,10 @@ public class BossAI : MonoBehaviour
 
             if (distanceToPlayer <= closeDistance && melee != null)
             {
-                Debug.Log("Player is close. Boss is attacking!");
                 melee.SetActive(true);
             }
             else
             {
-                Debug.Log("Normal attack inbound!");
                 if (count >= attacks.Length) count = 0;
 
                 attacks[count].SetActive(true);
@@ -60,7 +58,6 @@ public class BossAI : MonoBehaviour
 
     void ResetAttacking()
     {
-        Debug.LogWarning("Reset attacking");
         attacking = false;
     }
 

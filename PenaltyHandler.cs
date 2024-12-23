@@ -104,7 +104,6 @@ public class PenaltyHandler : MonoBehaviour
 
     IEnumerator ShotHandler()
     {
-        Debug.Log("Arrow movement started.");
         while (!ArduinoDataManager.Instance.ButtonAPressed && !ArduinoDataManager.Instance.ButtonBPressed)
         {
             if (isArrowMovingUp)
@@ -135,16 +134,16 @@ public class PenaltyHandler : MonoBehaviour
         TriggerKeeperAnimation();
 
         shotTaken = true;
-        Debug.Log("Arrow stopped at position: " + arrowPosition);
     }
 
     void DetermineShotDirection()
     {
-        if (ArduinoDataManager.Instance.JoystickDirection == "Left")
+        // Determine the goal direction based on joystick input
+        if (ArduinoDataManager.Instance.JoystickDirection == "Left" || ArduinoDataManager.Instance.JoystickDirection == "LeftUp" || ArduinoDataManager.Instance.JoystickDirection == "LeftDown")
         {
             goalDirection = "Left";
         }
-        else if (ArduinoDataManager.Instance.JoystickDirection == "Right")
+        else if (ArduinoDataManager.Instance.JoystickDirection == "Right" || ArduinoDataManager.Instance.JoystickDirection == "RightUp" || ArduinoDataManager.Instance.JoystickDirection == "RightDown")
         {
             goalDirection = "Right";
         }
@@ -152,16 +151,30 @@ public class PenaltyHandler : MonoBehaviour
         {
             goalDirection = "Center";
         }
-        Debug.Log(goalDirection);
 
-        int randomDirection = Random.Range(0, 3);
+        int randomDirection = Random.Range(0, 2);
+        Debug.Log(randomDirection);
         if (randomDirection == 0)
-            keeperDirection = "Left";
-        else if (randomDirection == 1)
-            keeperDirection = "Right";
+        {
+            keeperDirection = goalDirection;
+        }
         else
-            keeperDirection = "Center";
+        {
+            if (goalDirection == "Left")
+            {
+                keeperDirection = Random.value < 0.5f ? "Right" : "Center";
+            }
+            else if (goalDirection == "Right")
+            {
+                keeperDirection = Random.value < 0.5f ? "Left" : "Center";
+            }
+            else
+            {
+                keeperDirection = Random.value < 0.5f ? "Left" : "Right";
+            }
+        }
     }
+
 
     void TriggerKeeperAnimation()
     {

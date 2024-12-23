@@ -18,11 +18,18 @@ const int VRx = A0; // Joystick X-axis pin
 const int VRy = A1; // Joystick Y-axis pin
 const int SW = 4;   // Joystick button pin
 
+const int lampPin = 14;
+bool lampState = false;
+
 void setup() {
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP); // New button on pin 5
   pinMode(SW, INPUT_PULLUP); // Joystick button
+
+  // lamp
+  pinMode(lampPin, OUTPUT); // Set lamp pin as OUTPUT
+  digitalWrite(lampPin, LOW); // Turn the lamp off initially
 
   Serial.begin(9600);
 }
@@ -70,13 +77,13 @@ void loop() {
     if (reading3 != buttonState3) {
       buttonState3 = reading3;
       if (buttonState3 == LOW) {
-        Serial.println("E");
+        Serial.println("C");
       }
     }
   }
   lastButtonState3 = reading3;
 
-  // Handle joystick inputs as before...
+  // Handle joystick inputs
   int xValue = analogRead(VRx);
   int yValue = analogRead(VRy);
   String joystickMsg = "";
@@ -86,9 +93,7 @@ void loop() {
   } 
   else if (xValue > 600) {
     joystickMsg = "Right";
-  }
-  else
-  {
+  } else {
     joystickMsg = "";
   }
 
@@ -101,8 +106,21 @@ void loop() {
 
   if (joystickMsg != "") {
     Serial.println(joystickMsg);
-  }
-  else{
+  } else {
     Serial.println("");
   }
+
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+
+    if (command == "DOBBEL") {
+      lampState = true;
+      LightUp();
+    }
+  }
+}
+
+void LightUp() {
+  digitalWrite(lampPin, lampState ? HIGH : LOW);
 }

@@ -58,6 +58,26 @@ public class SerialReader : MonoBehaviour
         }
     }
 
+    public void SendCommand(string command)
+    {
+        if (serialPort != null && serialPort.IsOpen)
+        {
+            try
+            {
+                serialPort.WriteLine(command);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error writing to serial port: " + e.Message);
+            }
+        }
+    }
+
+    public void Dobbel()
+    {
+        SendCommand("DOBBEL");
+    }
+
     void OnApplicationQuit()
     {
         keepReading = false;

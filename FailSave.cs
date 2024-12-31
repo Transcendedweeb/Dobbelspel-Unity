@@ -18,6 +18,18 @@ public class FailSave : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    void IdleState()
+    {
+        Debug.LogWarning("Returning to idle state");
+        SceneManager.LoadScene("Idle Scene");
+    }
+
+    void MainState()
+    {
+        Debug.LogWarning("Returning to main state");
+        SceneManager.LoadScene("Main Scene");
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -27,6 +39,22 @@ public class FailSave : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.C))
         {
             ClearPlayerPrefs();
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            IdleState();
+        }
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            MainState();
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            SerialReader serialReader = FindObjectOfType<SerialReader>();
+            if (serialReader != null)
+            {
+                serialReader.Dobbel();
+            }
         }
     }
 }

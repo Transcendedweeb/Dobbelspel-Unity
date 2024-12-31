@@ -20,6 +20,7 @@ public class RollCasinoReward : MonoBehaviour
    bool end = false;
    bool defeat = false;
    bool con = false;
+   bool rolled = false;
 
    public void CheckVictroy(int choice)
    {
@@ -114,8 +115,9 @@ public class RollCasinoReward : MonoBehaviour
         }
         else if (con)
         {
-            if (ArduinoDataManager.Instance.ButtonBPressed)
+            if (ArduinoDataManager.Instance.ButtonBPressed && !rolled)
             {
+                rolled = true;
                 ArduinoDataManager.Instance.ResetButtonStates();
                 Destroy(endingIcons);
                 RollChance(this.GetComponent<CasinoUi>().currentIndex);

@@ -316,10 +316,10 @@ public class PenaltyHandler : MonoBehaviour
                 arrowSpeed = 2;
                 break;
             case 1:
-                arrowSpeed = 6;
+                arrowSpeed = 4;
                 break;
             default:
-                arrowSpeed = 12;
+                arrowSpeed = 9;
                 break;
         }
     }

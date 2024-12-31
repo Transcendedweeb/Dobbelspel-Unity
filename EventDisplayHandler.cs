@@ -69,11 +69,11 @@ public class EventDisplayHandler : MonoBehaviour
 
             new GameEvent("Belasting incasso", "Alle spelers met meer dan 5eu moeten 3eu aan de belasting betalen. (De pinpas beschermt niet tegen dit effect)."),
 
-            new GameEvent("Underworld casino", "Iedere speler betaalt 2eu in de pot. Iedereen dobbelt en de speler die het hoogst dobbelt wint de pot. (Er wordt doorgedobbeld totdat er een winnaar is)."),
+            new GameEvent("Underworld casino", "Speel een ronde in de casino voor 3eu."),
 
             new GameEvent("Smerige snotneus", "Door je smerige snotneus denkt de politie dat je corona hebt. Sla je volgende beurt over."),
 
-            new GameEvent("Marco's zware leven", "Marco heeft een echt \"zwaar\" leven. Hij mag eindelijk uitrusten, dus iedere speler genaamd Marco slaat 2 beurten over."),
+            new GameEvent("Auto terug… ?", "Marco krijgt na twee weken eindelijk zijn auto terug! Iedere speler genaamd Marco krijgt... oh, er zit geen benzine in. Dat is wel heel pittig, want het kost hem twee beurten om de auto naar het tankstation te duwen. Gelukkig krijgt hij het item \"Auto\": In plaats van dobbelen rijd je automatisch 10 stappen. Iedereen die je overrijdt, wordt zonder pardon naar het startvakje gestuurd. Veel rijplezier!"),
 
             new GameEvent("Economische crisis", "De speler die de meeste cadeaus heeft geopend, moet zijn belastingmuntjes maximaal aanvullen. Bij een gelijkspel vult hij tot 2 muntjes aan. Bij een 3-way tie of meer, vult hij tot 1 muntje."),
 
@@ -93,7 +93,7 @@ public class EventDisplayHandler : MonoBehaviour
 
             new GameEvent("Knuppel", "Selecteer een andere speler; hij/zij slaat zijn/haar volgende beurt over."),
 
-            new GameEvent("Armehuis", "Iedere speler met minder dan 4eu krijgt 1eu van de armehuis."),
+            new GameEvent("Armehuis", "Iedere speler met minder dan 4eu krijgt 1eu van het armehuis."),
 
             new GameEvent("Corrupte politie", "Iedere speler op een groen vakje moet 4eu aan de politie betalen."),
 

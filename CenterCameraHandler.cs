@@ -14,6 +14,8 @@ public class CenterCameraHandler : MonoBehaviour
     public GameObject colloseum;
     public GameObject roulette;
     public GameObject casino;
+    public AudioSource audioSource;
+    public AudioClip[] audioClips;
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
@@ -61,7 +63,12 @@ public class CenterCameraHandler : MonoBehaviour
 
     void SendDobbelMessage()
     {
-        Debug.Log("dobbelen");
+        SerialReader serialReader = FindObjectOfType<SerialReader>();
+        if (serialReader != null)
+        {
+            serialReader.Dobbel();
+        }
+        StartCoroutine(DobbelSound());
         ArduinoDataManager.Instance.ButtonBPressed = false;
     }
 
@@ -207,6 +214,17 @@ public class CenterCameraHandler : MonoBehaviour
         foreach (AudioSource audioSrc in allAudioSources)
         {
             audioSrc.Stop();
+        }
+    }
+    IEnumerator DobbelSound()
+    {
+        for (int i = 0; i < audioClips.Length; i++)
+        {
+            audioSource.clip = audioClips[i];
+            audioSource.Play();
+
+            // Wait for the clip duration or a fixed 0.6 seconds
+            yield return new WaitForSeconds(0.6f); 
         }
     }
 

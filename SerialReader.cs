@@ -75,6 +75,7 @@ public class SerialReader : MonoBehaviour
 
     public void Dobbel()
     {
+        Debug.Log("Send DOBBEL command");
         SendCommand("DOBBEL");
     }
 

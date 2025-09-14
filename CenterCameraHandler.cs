@@ -223,8 +223,7 @@ public class CenterCameraHandler : MonoBehaviour
             audioSource.clip = audioClips[i];
             audioSource.Play();
 
-            // Wait for the clip duration or a fixed 0.6 seconds
-            yield return new WaitForSeconds(0.6f); 
+            yield return new WaitForSeconds(1.2f); 
         }
     }
 

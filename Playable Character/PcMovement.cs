@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PcMovement : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float gravity = -9.8f;
     [HideInInspector] public string lastMov;
     public Animator modelAnim;
+    [HideInInspector]  public enum MovementState {idle = 0, leanForward = 1, leanBackwards = 2, leanLeft = 3, leanRight = 4};
+
     CharacterController characterController;
     Vector3 moveDirection;
 
@@ -22,61 +25,66 @@ public class PcMovement : MonoBehaviour
         MoveCharacter();
     }
 
-    void UpdateMoveDirection(string direction)
+ void UpdateMoveDirection(string direction)
+{
+    Vector3 newMoveDir;
+    MovementState newLeanPosition;
+
+    switch (direction)
     {
-        moveDirection = Vector3.zero;
-        int newForm = 0;
+        case "RightUp":
+            newMoveDir = (Vector3.forward + Vector3.right).normalized;
+            newLeanPosition = MovementState.leanForward;
+            break;
 
-        if (direction == "RightUp")
-        {
-            moveDirection = (Vector3.forward + Vector3.right).normalized;
-            newForm = 3;
-        }
-        else if (direction == "LeftUp")
-        {
-            moveDirection = (Vector3.forward + Vector3.left).normalized;
-            newForm = 2;
-        }
-        else if (direction == "RightDown")
-        {
-            moveDirection = (Vector3.back + Vector3.right).normalized;
-            newForm = 3;
-        }
-        else if (direction == "LeftDown")
-        {
-            moveDirection = (Vector3.back + Vector3.left).normalized;
-            newForm = 2;
-        }
-        else if (direction == "Up")
-        {
-            moveDirection = Vector3.forward;
-            newForm = 1;
-        }
-        else if (direction == "Down")
-        {
-            moveDirection = Vector3.back;
-            newForm = 1;
-        }
-        else if (direction == "Left")
-        {
-            moveDirection = Vector3.left;
-            newForm = 2;
-        }
-        else if (direction == "Right")
-        {
-            moveDirection = Vector3.right;
-            newForm = 3;
-        }
-        else
-        {
+        case "LeftUp":
+            newMoveDir = (Vector3.forward + Vector3.left).normalized;
+            newLeanPosition = MovementState.leanForward;
+            break;
+
+        case "RightDown":
+            newMoveDir = (Vector3.back + Vector3.right).normalized;
+            newLeanPosition = MovementState.leanBackwards;
+            break;
+
+        case "LeftDown":
+            newMoveDir = (Vector3.back + Vector3.left).normalized;
+            newLeanPosition = MovementState.leanBackwards;
+            break;
+
+        case "Up":
+            newMoveDir = Vector3.forward;
+            newLeanPosition = MovementState.leanForward;
+            break;
+
+        case "Down":
+            newMoveDir = Vector3.back;
+            newLeanPosition = MovementState.leanBackwards;
+            break;
+
+        case "Left":
+            newMoveDir = Vector3.left;
+            newLeanPosition = MovementState.leanLeft;
+            break;
+
+        case "Right":
+            newMoveDir = Vector3.right;
+            newLeanPosition = MovementState.leanRight;
+            break;
+
+        default:
             moveDirection = Vector3.zero;
-            modelAnim.SetInteger("Form", 0);
+            modelAnim.SetInteger("Lean position", (int)MovementState.idle);
             return;
-        }
-
-        lastMov = direction;
-        modelAnim.SetInteger("Form", newForm);
     }
+
+
+    lastMov = direction;
+    moveDirection = newMoveDir;
+
+    modelAnim.SetInteger("Lean position", (int)newLeanPosition);
+    modelAnim.SetTrigger("Movement");
+}
 
     void MoveCharacter()
     {

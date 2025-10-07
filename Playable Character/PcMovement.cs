@@ -74,6 +74,7 @@ public class PcMovement : MonoBehaviour
 
         default:
             moveDirection = Vector3.zero;
+            lastMov = "None";
             modelAnim.SetInteger("Lean position", (int)MovementState.idle);
             return;
     }

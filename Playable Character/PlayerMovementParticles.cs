@@ -70,9 +70,9 @@ public class PlayerMovementParticles : MonoBehaviour
         }
     }
 
-    void EnableParticleEffect(List<GameObject> particlesToEnable)
+    public void EnableParticleEffect(List<GameObject> particlesToEnable, bool disableActive = true)
     {
-        DisableActiveParticles();
+        if (disableActive) DisableActiveParticles();
         foreach (GameObject particle in particlesToEnable)
         {
             particle.SetActive(true);

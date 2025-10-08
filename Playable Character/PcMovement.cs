@@ -25,58 +25,58 @@ public class PcMovement : MonoBehaviour
         MoveCharacter();
     }
 
- void UpdateMoveDirection(string direction)
-{
-    Vector3 newMoveDir;
-    MovementState newLeanPosition;
-
-    switch (direction)
+    void UpdateMoveDirection(string direction)
     {
-        case "RightUp":
-            newMoveDir = (Vector3.forward + Vector3.right).normalized;
-            newLeanPosition = MovementState.leanForward;
-            break;
+        Vector3 newMoveDir;
+        MovementState newLeanPosition;
 
-        case "LeftUp":
-            newMoveDir = (Vector3.forward + Vector3.left).normalized;
-            newLeanPosition = MovementState.leanForward;
-            break;
+        switch (direction)
+        {
+            case "RightUp":
+                newMoveDir = (Vector3.forward + Vector3.right).normalized;
+                newLeanPosition = MovementState.leanForward;
+                break;
 
-        case "RightDown":
-            newMoveDir = (Vector3.back + Vector3.right).normalized;
-            newLeanPosition = MovementState.leanBackwards;
-            break;
+            case "LeftUp":
+                newMoveDir = (Vector3.forward + Vector3.left).normalized;
+                newLeanPosition = MovementState.leanForward;
+                break;
 
-        case "LeftDown":
-            newMoveDir = (Vector3.back + Vector3.left).normalized;
-            newLeanPosition = MovementState.leanBackwards;
-            break;
+            case "RightDown":
+                newMoveDir = (Vector3.back + Vector3.right).normalized;
+                newLeanPosition = MovementState.leanBackwards;
+                break;
 
-        case "Up":
-            newMoveDir = Vector3.forward;
-            newLeanPosition = MovementState.leanForward;
-            break;
+            case "LeftDown":
+                newMoveDir = (Vector3.back + Vector3.left).normalized;
+                newLeanPosition = MovementState.leanBackwards;
+                break;
 
-        case "Down":
-            newMoveDir = Vector3.back;
-            newLeanPosition = MovementState.leanBackwards;
-            break;
+            case "Up":
+                newMoveDir = Vector3.forward;
+                newLeanPosition = MovementState.leanForward;
+                break;
 
-        case "Left":
-            newMoveDir = Vector3.left;
-            newLeanPosition = MovementState.leanLeft;
-            break;
+            case "Down":
+                newMoveDir = Vector3.back;
+                newLeanPosition = MovementState.leanBackwards;
+                break;
 
-        case "Right":
-            newMoveDir = Vector3.right;
-            newLeanPosition = MovementState.leanRight;
-            break;
+            case "Left":
+                newMoveDir = Vector3.left;
+                newLeanPosition = MovementState.leanLeft;
+                break;
 
-        default:
-            moveDirection = Vector3.zero;
-            lastMov = "None";
-            modelAnim.SetInteger("Lean position", (int)MovementState.idle);
-            return;
+            case "Right":
+                newMoveDir = Vector3.right;
+                newLeanPosition = MovementState.leanRight;
+                break;
+
+            default:
+                moveDirection = Vector3.zero;
+                lastMov = "None";
+                modelAnim.SetInteger("Lean position", (int)MovementState.idle);
+                return;
     }
 
 
@@ -84,7 +84,6 @@ public class PcMovement : MonoBehaviour
     moveDirection = newMoveDir;
 
     modelAnim.SetInteger("Lean position", (int)newLeanPosition);
-    modelAnim.SetTrigger("Movement");
 }
 
     void MoveCharacter()

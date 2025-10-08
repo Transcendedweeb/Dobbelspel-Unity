@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,27 @@ public class DodgeRoll : MonoBehaviour
 {
     public float rollDistance = 5f;
     public float rollSpeed = 10f;
+    public float resetDelay = .5f;
+    public float animationDelay = .1f;
     public GameObject model;
     public Animator animator;
+    [HideInInspector] public enum DashState { forward = 1, backwards = 2, left = 3, right = 4, reset = 5 };
+    public List<GameObject> dashParticlesUp = new();
+    public List<GameObject> dashParticlesDown = new();
+    public List<GameObject> dashParticlesLeft = new();
+    public List<GameObject> dashParticlesRight = new();
+    public PlayerMovementParticles playerMovementParticles;
+
+
     bool trigger;
     bool rolling = false;
     PcMovement pcMovement;
-    private CharacterController characterController;
+    CharacterController characterController;
 
     void Start()
     {
-        trigger = this.GetComponent<PcShoot>().triggerRelease;
-        pcMovement = this.GetComponent<PcMovement>();
+        trigger = GetComponent<PcShoot>().triggerRelease;
+        pcMovement = GetComponent<PcMovement>();
         characterController = GetComponent<CharacterController>();
     }
 
@@ -30,8 +41,9 @@ public class DodgeRoll : MonoBehaviour
             {
                 rolling = true;
                 pcMovement.enabled = false;
-                this.GetComponent<PcShoot>().enabled = false;
-                this.GetComponent<HealthManager>().enabled = false;
+                animator.SetInteger("Lean position", 5);
+                GetComponent<PcShoot>().enabled = false;
+                GetComponent<HealthManager>().enabled = false;
                 Roll();
             }
         }
@@ -42,52 +54,73 @@ public class DodgeRoll : MonoBehaviour
         ArduinoDataManager.Instance.ResetButtonStates();
         pcMovement.enabled = true;
         rolling = false;
-        this.GetComponent<PcShoot>().enabled = true;
-        this.GetComponent<HealthManager>().enabled = true;
-        model.transform.localEulerAngles = new Vector3(5, 12, 0);
+        animator.SetInteger("Dash position", (int)DashState.reset);
+        GetComponent<PcShoot>().enabled = true;
+        GetComponent<HealthManager>().enabled = true;
+        model.transform.localRotation = Quaternion.Euler(0, 180, 0);
     }
 
     void Roll()
     {
-        Vector3 rollDirection = Vector3.zero;
-        if (pcMovement.lastMov == "RightUp")
+        Vector3 rollDirection;
+        DashState newDashPosition;
+
+        switch (pcMovement.lastMov)
         {
-            rollDirection = (transform.right + transform.forward).normalized;
-        }
-        else if (pcMovement.lastMov == "LeftUp")
-        {
-            rollDirection = (-transform.right + transform.forward).normalized;
-        }
-        else if (pcMovement.lastMov == "RightDown")
-        {
-            rollDirection = (transform.right - transform.forward).normalized;
-        }
-        else if (pcMovement.lastMov == "LeftDown")
-        {
-            rollDirection = (-transform.right - transform.forward).normalized;
-        }
-        else if (pcMovement.lastMov == "Down")
-        {
-            rollDirection = -transform.forward;
-        }
-        else if (pcMovement.lastMov == "Left")
-        {
-            rollDirection = -transform.right;
-        }
-        else if (pcMovement.lastMov == "Right")
-        {
-            rollDirection = transform.right;
-        }
-        else
-        {
-            rollDirection = transform.forward;
+            case "RightUp":
+                rollDirection = (transform.right + transform.forward).normalized;
+                newDashPosition = DashState.forward;
+                StartCoroutine(StartParticleBoost(dashParticlesUp));
+                break;
+
+            case "LeftUp":
+                rollDirection = (-transform.right + transform.forward).normalized;
+                newDashPosition = DashState.forward;
+                StartCoroutine(StartParticleBoost(dashParticlesUp));
+                break;
+
+            case "RightDown":
+                rollDirection = (transform.right - transform.forward).normalized;
+                newDashPosition = DashState.backwards;
+                StartCoroutine(StartParticleBoost(dashParticlesDown));
+                break;
+
+            case "LeftDown":
+                rollDirection = (-transform.right - transform.forward).normalized;
+                newDashPosition = DashState.backwards;
+                StartCoroutine(StartParticleBoost(dashParticlesDown));
+                break;
+
+            case "Down":
+                rollDirection = -transform.forward;
+                newDashPosition = DashState.backwards;
+                StartCoroutine(StartParticleBoost(dashParticlesDown));
+                break;
+
+            case "Left":
+                rollDirection = -transform.right;
+                newDashPosition = DashState.left;
+                StartCoroutine(StartParticleBoost(dashParticlesLeft));
+                break;
+
+            case "Right":
+                rollDirection = transform.right;
+                newDashPosition = DashState.right;
+                StartCoroutine(StartParticleBoost(dashParticlesRight));
+                break;
+
+            default:
+                rollDirection = transform.forward;
+                newDashPosition = DashState.forward;
+                playerMovementParticles.EnableParticleEffect(dashParticlesUp, false);
+                StartCoroutine(StartParticleBoost(dashParticlesUp));
+                break;
         }
 
-        animator.SetTrigger("Dodge");
+        animator.SetInteger("Dash position", (int)newDashPosition);
 
         if (rollDirection != Vector3.zero)
         {
-            model.transform.rotation = Quaternion.LookRotation(rollDirection);
             StartCoroutine(PerformRoll(rollDirection));
         }
     }
@@ -98,11 +131,18 @@ public class DodgeRoll : MonoBehaviour
 
         while (distanceRolled < rollDistance)
         {
+            model.transform.localRotation = Quaternion.Euler(0, 180, 0);
             float step = rollSpeed * Time.deltaTime;
             characterController.Move(rollDirection * step);
             distanceRolled += step;
             yield return null;
         }
-        Invoke("Reset", .5f);
+        Invoke(nameof(Reset), resetDelay);
+    }
+
+    IEnumerator StartParticleBoost(List<GameObject> particlesToEnable)
+    {
+        yield return new WaitForSeconds(animationDelay);
+        playerMovementParticles.EnableParticleEffect(particlesToEnable, false);
     }
 }

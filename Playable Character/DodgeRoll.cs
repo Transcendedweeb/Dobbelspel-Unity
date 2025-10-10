@@ -119,6 +119,14 @@ public class DodgeRoll : MonoBehaviour
 
         animator.SetInteger("Dash position", (int)newDashPosition);
 
+        FindObjectOfType<PlayerCameraHandler>()?.TriggerDodgeLag();
+        FindObjectOfType<PlayerCameraHandler>()?.TriggerCameraShake(1.5f, 1.2f);
+
+        if (rollDirection != Vector3.zero)
+        {
+            StartCoroutine(PerformRoll(rollDirection));
+        }
+
         if (rollDirection != Vector3.zero)
         {
             StartCoroutine(PerformRoll(rollDirection));

@@ -14,9 +14,20 @@ public class PlayerCameraHandler : MonoBehaviour
     public float forwardLag = 0.3f;        // How much it lags when moving forward/back
     public float returnSpeed = 5f;         // How fast it recenters after movement stops
 
-    private Vector3 desiredLocalPos;
-    private Vector3 initialLocalPos;
-    private Vector3 velocity;
+    [Header("Dodge Lag Settings")]
+    public float dodgeLagMultiplier = 2f;     // How much to amplify lag during a dodge
+    public float dodgeLagDuration = 0.5f;     // How long to keep that extra lag
+    private bool isDodging = false;     // Flag
+
+    [Header("Camera Shake Settings")]
+    public float shakeIntensity = 0.1f;    // Default strength of the shake
+    public float shakeDuration = 0.2f;     // Default duration of the shake
+    public AnimationCurve shakeFalloff = AnimationCurve.EaseInOut(0, 1, 1, 0); // Smooth fade-out
+
+    Vector3 desiredLocalPos;
+    Vector3 initialLocalPos;
+    Vector3 velocity;
+    Coroutine shakeRoutine;
 
     void Start()
     {
@@ -76,5 +87,66 @@ public class PlayerCameraHandler : MonoBehaviour
 
         if (dir == "None")
             desiredLocalPos = initialLocalPos;
+    }
+
+    public void TriggerDodgeLag()
+    {
+        if (!isDodging) StartCoroutine(ApplyDodgeLag());
+    }
+
+    private IEnumerator ApplyDodgeLag()
+    {
+        isDodging = true;
+        float originalStrafeLag = strafeLag;
+        float originalForwardLag = forwardLag;
+
+        strafeLag *= dodgeLagMultiplier;
+        forwardLag *= dodgeLagMultiplier;
+
+        yield return new WaitForSeconds(dodgeLagDuration);
+
+        strafeLag = originalStrafeLag;
+        forwardLag = originalForwardLag;
+        isDodging = false;
+    }
+
+    public void TriggerCameraShake(float intensityMultiplier = 1f, float durationMultiplier = 1f)
+    {
+        if (shakeRoutine != null)
+            StopCoroutine(shakeRoutine);
+
+        shakeRoutine = StartCoroutine(DoCameraShake(intensityMultiplier, durationMultiplier));
+    }
+
+    IEnumerator DoCameraShake(float intensityMultiplier, float durationMultiplier)
+    {
+        float elapsed = 0f;
+        Vector3 originalLocalPos = transform.localPosition;
+
+        while (elapsed < shakeDuration * durationMultiplier)
+        {
+            float normalizedTime = elapsed / (shakeDuration * durationMultiplier);
+            float falloff = shakeFalloff.Evaluate(normalizedTime);
+            float currentIntensity = shakeIntensity * intensityMultiplier * falloff;
+
+            // Random offset (small sphere)
+            Vector3 shakeOffset = Random.insideUnitSphere * currentIntensity;
+
+            transform.localPosition = desiredLocalPos + shakeOffset;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Smoothly return to the normal desired position
+        float t = 0f;
+        while (t < 0.1f)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, desiredLocalPos, t / 0.1f);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localPosition = desiredLocalPos;
     }
 }

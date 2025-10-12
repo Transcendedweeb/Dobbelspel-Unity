@@ -4,27 +4,39 @@ using UnityEngine;
 
 public class PcShoot : MonoBehaviour
 {
-    public GameObject muzzlePos; // De positie waar het projectiel wordt gespawned
-    public GameObject shotPrefab; // Het prefab van het projectiel
-    public LockOn lockOnScript; // Verwijzing naar het LockOn-script
-    public float burstWaitTime; // Tussenpozen tussen schoten in een burst
-    public float nextShotWaitTime; // Tussenpozen tussen bursts
-    public Vector3 projectileRotationOffset; // Optionele offset voor de projectielrotatie
-    public bool triggerRelease = false;
-    private bool waiting = false;
+    public GameObject muzzlePos;
+    public GameObject shotPrefab;
+    public LockOn lockOnScript;
+    public int shots = 1;
+    public float burstWaitTime = 0;
+    public float nextShotWaitTime = 1;
+    public int bulletsPerShot = 1;
+    public Vector3[] bulletsPerShotOffset;
+    public Vector3 projectileRotationOffset;
+    public AudioClip shootClip;
+    [HideInInspector] public bool triggerRelease = false;
+    
+    AudioSource audioSource;
+    
+    bool waiting = false;
 
     void Update()
     {
         if (ArduinoDataManager.Instance.ButtonAPressed)
         {
             ArduinoDataManager.Instance.ButtonAPressed = false;
-            if (!waiting) 
+            if (!waiting)
             {
                 waiting = true;
                 triggerRelease = true;
                 StartCoroutine(BurstFire());
             }
         }
+    }
+    
+    void Start()
+    {
+        audioSource = muzzlePos.GetComponent<AudioSource>();
     }
 
     void OnEnable()
@@ -35,42 +47,47 @@ public class PcShoot : MonoBehaviour
 
     IEnumerator BurstFire()
     {
-        InstantiateShot();
-        yield return new WaitForSeconds(burstWaitTime);
 
-        InstantiateShot();
-        yield return new WaitForSeconds(burstWaitTime);
+        for (int i = 0; i < shots; i++)
+        {
+            InstantiateShot();
+            if (audioSource != null && shootClip != null) audioSource.PlayOneShot(shootClip);
 
-        InstantiateShot();
-        triggerRelease = false;
-        yield return new WaitForSeconds(nextShotWaitTime);
+            if (i == shots-1) triggerRelease = false;
+            yield return new WaitForSeconds(burstWaitTime);
+        }
 
         waiting = false;
     }
 
     void InstantiateShot()
     {
-        // Controleer of het LockOn-script en het doel beschikbaar zijn
+        Quaternion baseRotation;
+        Vector3 basePosition = muzzlePos.transform.position;
+
         if (lockOnScript != null && lockOnScript.target != null)
         {
-            // Bereken de richting naar het doel
-            Vector3 directionToTarget = lockOnScript.target.transform.position - muzzlePos.transform.position;
-            directionToTarget.Normalize(); // Zorg ervoor dat de richting een eenheidsvector is
+            Vector3 directionToTarget = lockOnScript.target.transform.position - basePosition;
+            directionToTarget.Normalize();
 
-            // Bereken de rotatie die naar het doel wijst
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-
-            // Pas de offset toe
-            targetRotation *= Quaternion.Euler(projectileRotationOffset);
-
-            // Spawn het projectiel met de berekende rotatie
-            Instantiate(shotPrefab, muzzlePos.transform.position, targetRotation);
+            baseRotation = Quaternion.LookRotation(directionToTarget);
         }
         else
         {
-            // Als er geen doel is, gebruik de standaard rotatie van het wapen
-            Quaternion defaultRotation = muzzlePos.transform.rotation * Quaternion.Euler(projectileRotationOffset);
-            Instantiate(shotPrefab, muzzlePos.transform.position, defaultRotation);
+            baseRotation = muzzlePos.transform.rotation;
+        }
+
+        baseRotation *= Quaternion.Euler(projectileRotationOffset);
+
+        for (int b = 0; b < bulletsPerShot; b++)
+        {
+            Vector3 offset = Vector3.zero;
+            if (bulletsPerShotOffset != null && b < bulletsPerShotOffset.Length)
+                offset = bulletsPerShotOffset[b];
+
+            Vector3 spawnPos = basePosition + muzzlePos.transform.TransformDirection(offset);
+
+            Instantiate(shotPrefab, spawnPos, baseRotation);
         }
     }
 }

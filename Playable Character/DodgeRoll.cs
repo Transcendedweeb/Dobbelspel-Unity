@@ -5,19 +5,27 @@ using UnityEngine;
 
 public class DodgeRoll : MonoBehaviour
 {
+    [Header("Dodge settings")]
     public float rollDistance = 5f;
     public float rollSpeed = 10f;
     public float resetDelay = .5f;
     public float animationDelay = .1f;
+
+    [Header("Dodge animations")]
     public GameObject model;
     public Animator animator;
     [HideInInspector] public enum DashState { forward = 1, backwards = 2, left = 3, right = 4, reset = 5 };
+
+    [Header("Dodge particles")]
     public List<GameObject> dashParticlesUp = new();
     public List<GameObject> dashParticlesDown = new();
     public List<GameObject> dashParticlesLeft = new();
     public List<GameObject> dashParticlesRight = new();
     public PlayerMovementParticles playerMovementParticles;
 
+    [Header("Dodge sounds")]
+    public AudioSource audioSource;
+    public AudioClip dodgeSFX;
 
     bool trigger;
     bool rolling = false;
@@ -117,6 +125,7 @@ public class DodgeRoll : MonoBehaviour
                 break;
         }
 
+        PlaySfx.PlaySFX(dodgeSFX, audioSource);
         animator.SetInteger("Dash position", (int)newDashPosition);
 
         FindObjectOfType<PlayerCameraHandler>()?.TriggerDodgeLag();

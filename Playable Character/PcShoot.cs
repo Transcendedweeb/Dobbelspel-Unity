@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class PcShoot : MonoBehaviour
 {
+    [Header("Muzzle and aim")]
     public GameObject muzzlePos;
     public GameObject shotPrefab;
     public LockOn lockOnScript;
+
+    [Header("Settings for 1 shot")]
     public int shots = 1;
     public float burstWaitTime = 0;
     public float nextShotWaitTime = 1;
     public int bulletsPerShot = 1;
+
+    [Header("Muzzle and aim offset")]
     public Vector3[] bulletsPerShotOffset;
     public Vector3 projectileRotationOffset;
+
+    [Header("Energy")]
+    public PlayerEnergy playerEnergy;
+    public float energyCost;
+
+    [Header("Audio")]
     public AudioClip shootClip;
     [HideInInspector] public bool triggerRelease = false;
     
@@ -27,6 +38,9 @@ public class PcShoot : MonoBehaviour
             ArduinoDataManager.Instance.ButtonAPressed = false;
             if (!waiting)
             {
+                bool energyFlag = playerEnergy.LowerEnergy(energyCost);
+                if (!energyFlag) return;
+                
                 waiting = true;
                 triggerRelease = true;
                 StartCoroutine(BurstFire());
@@ -51,7 +65,7 @@ public class PcShoot : MonoBehaviour
         for (int i = 0; i < shots; i++)
         {
             InstantiateShot();
-            if (audioSource != null && shootClip != null) audioSource.PlayOneShot(shootClip);
+            if (audioSource != null && shootClip != null) PlaySfx.PlaySFX(shootClip, audioSource);
 
             if (i == shots-1) triggerRelease = false;
             yield return new WaitForSeconds(burstWaitTime);

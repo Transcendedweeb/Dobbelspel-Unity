@@ -5,11 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PcMovement : MonoBehaviour
 {
+    [Header("Movement settings")]
     public float moveSpeed = 10f;
     public float gravity = -9.8f;
     [HideInInspector] public string lastMov;
+
+    [Header("Animation setting")]
     public Animator modelAnim;
     [HideInInspector]  public enum MovementState {idle = 0, leanForward = 1, leanBackwards = 2, leanLeft = 3, leanRight = 4};
+
+    [Header("Sound settings")]
+    public AudioSource movingAudioSource; // constantly loops the audio clip when moving, and only stops when the player stops moving
+    public AudioClip movingSFX;
 
     CharacterController characterController;
     Vector3 moveDirection;
@@ -76,15 +83,17 @@ public class PcMovement : MonoBehaviour
                 moveDirection = Vector3.zero;
                 lastMov = "None";
                 modelAnim.SetInteger("Lean position", (int)MovementState.idle);
+                PlaySfx.StopSFX(movingAudioSource, movingSFX);
                 return;
+        }
+
+        if (!movingAudioSource.isPlaying) PlaySfx.PlaySFX(movingSFX, movingAudioSource, loop: true);
+
+        lastMov = direction;
+        moveDirection = newMoveDir;
+
+        modelAnim.SetInteger("Lean position", (int)newLeanPosition);
     }
-
-
-    lastMov = direction;
-    moveDirection = newMoveDir;
-
-    modelAnim.SetInteger("Lean position", (int)newLeanPosition);
-}
 
     void MoveCharacter()
     {

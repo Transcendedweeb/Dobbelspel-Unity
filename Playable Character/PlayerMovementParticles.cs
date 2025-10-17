@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class PlayerMovementParticles : MonoBehaviour
 {
+    [Header("Movement particles")]
     public PcMovement playerMovement;
     public List<GameObject> movementParticlesUp = new();
     public List<GameObject> movementParticlesBack = new();
     public List<GameObject> movementParticlesLeft = new();
     public List<GameObject> movementParticlesRight = new();
+
+    [Header("Booster start sound")]
+    public AudioSource boostersSource;    
+    public AudioClip startBoostersSFX;
 
     List<GameObject> activeParticles = new();
     string lastDir = "";
@@ -57,7 +62,7 @@ public class PlayerMovementParticles : MonoBehaviour
                 DisableActiveParticles();
                 break;
         }
-
+        PlaySfx.PlaySFX(startBoostersSFX, boostersSource);
     }
 
     void DisableActiveParticles()

@@ -5,23 +5,31 @@ using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
+    [Header("General settings")]
     public float health = 1000f;
     public Image healthBar;
     [HideInInspector] public float maxHealth;
     public GameObject endScreen;
     public GameObject player;
-    public GameObject damageSpark;
+
+    [Header("Blinking settings")]
+    public bool setBlinking = false;
+    public float blinkingHealthTreshold = 50f;
+    public Animator animator;
+    public AudioClip blinkingSound;
+    public AudioSource audioSource;
 
     void Start()
     {
         maxHealth = health;
+        CheckForBlinking();
     }
 
 
     public void AdjustHealth(int value)
     {
-        if (damageSpark != null) damageSpark.SetActive(true);
         health -= value;
+        CheckForBlinking();
         UpdateHealthBar();
         CheckForDeath();
     }
@@ -37,6 +45,14 @@ public class HealthManager : MonoBehaviour
     void UpdateHealthBar()
     {
         healthBar.fillAmount = health / maxHealth;
+    }
+
+    void CheckForBlinking()
+    {
+        if ((blinkingHealthTreshold < health || animator == null) && !setBlinking) return;
+
+        animator.SetBool("blink", true);
+        PlaySfx.PlaySFX(blinkingSound, audioSource, loop: true);
     }
 
     void StopPlayer()

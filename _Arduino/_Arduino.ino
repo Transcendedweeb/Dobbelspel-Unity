@@ -219,8 +219,11 @@ void loop() {
   String joystickMsg = ""; // To hold the message of the first active joystick
 
   for (int i = 0; i < 4; i++) { // Loop through all 4 joysticks
-    int xValue = analogRead(VRx[i]);
-    int yValue = analogRead(VRy[i]);
+    // int xValue = analogRead(VRx[i]);
+    // int yValue = analogRead(VRy[i]);
+
+    int xValue = analogRead(A0);
+    int yValue = analogRead(A1);
 
     if (xValue < 400) joystickMsg = "Left";
     else if (xValue > 600) joystickMsg = "Right";

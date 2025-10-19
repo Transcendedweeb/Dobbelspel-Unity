@@ -1,20 +1,25 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerEnergy : MonoBehaviour
 {
+    [Header("Energy Settings")]
     public float maxEnergy = 100f;
     public float refillRate = 10f;
     public float refillDelay = 2f;
 
-    float currentEnergy;
-    float lastEnergyUseTime;
-    bool isRefilling = false;
+    [Header("UI")]
+    public Image energyBar;
+
+    private float currentEnergy;
+    private float lastEnergyUseTime;
+    private bool isRefilling = false;
 
     void Start()
     {
         currentEnergy = maxEnergy;
+        UpdateEnergyBar();
     }
 
     void Update()
@@ -23,9 +28,11 @@ public class PlayerEnergy : MonoBehaviour
         {
             StartCoroutine(AutoRefill());
         }
+
+        UpdateEnergyBar();
     }
 
-    IEnumerator AutoRefill()
+    private IEnumerator AutoRefill()
     {
         isRefilling = true;
 
@@ -33,6 +40,7 @@ public class PlayerEnergy : MonoBehaviour
         {
             currentEnergy += refillRate * Time.deltaTime;
             currentEnergy = Mathf.Min(currentEnergy, maxEnergy);
+            UpdateEnergyBar();
             yield return null;
         }
 
@@ -41,17 +49,23 @@ public class PlayerEnergy : MonoBehaviour
 
     public bool LowerEnergy(float energyCost)
     {
-        if (currentEnergy - energyCost < 0) return false;
-        else
-        {
-            currentEnergy -= energyCost;
-            lastEnergyUseTime = Time.time;
-            return true;
-        }
+        if (currentEnergy - energyCost < 0f)
+            return false;
+
+        currentEnergy -= energyCost;
+        lastEnergyUseTime = Time.time;
+        UpdateEnergyBar();
+        return true;
     }
 
     public float GetEnergyPercent()
     {
         return currentEnergy / maxEnergy;
+    }
+
+    private void UpdateEnergyBar()
+    {
+        if (energyBar != null)
+            energyBar.fillAmount = GetEnergyPercent();
     }
 }

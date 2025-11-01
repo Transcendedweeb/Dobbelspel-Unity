@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class JumpAttack : MonoBehaviour
 {
+    [Header("Object References")]
     public GameObject mainParent;
+    public GameObject player;
+    public GameObject playerMarker;
+
+    [Header("Effect Settings")]
     public GameObject prefabEffect;
     public Vector3 positionOffsetEffect;
+
+    [Header("Attack Settings")]
     public GameObject prefabAttack;
     public Vector3 positionOffsetAttack;
     public Vector3 positionOffsetRotationAttack;
-    public GameObject player;
-    public GameObject playerMarker;
+
+    [Header("Movement Settings")]
     public float jumpSpeed = 5f;
     public float jumpDistance = 5f;
     public float dashSpeed = 5f;
     public float markerDistance = 7f;
     public float attackDistance = 5f;
+
+    [Header("Animation Settings")]
     public string animTriggerJump = "";
     public string animTriggerAttack = "";
     public float animWaitTime = .1f;
     public float endWaitTime = 0f;
+
+    [Header("Behavior Options")]
     public bool quickReset = false;
+
+    // Private fields
     bool changeMarker = false;
     Animator animator;
     BossAI bossAI;
@@ -33,9 +46,14 @@ public class JumpAttack : MonoBehaviour
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
         groundY = mainParent.transform.position.y;
+
         if (quickReset) bossAI.InvokeReset();
+
         playerMarker.SetActive(false);
-        if (animTriggerJump != "") animator.SetTrigger(animTriggerJump);
+
+        if (animTriggerJump != "")
+            animator.SetTrigger(animTriggerJump);
+
         StartCoroutine(Main());
     }
 
@@ -62,21 +80,27 @@ public class JumpAttack : MonoBehaviour
             Vector3 direction = (player.transform.position - mainParent.transform.position).normalized;
             mainParent.transform.position += direction * dashSpeed * Time.deltaTime;
 
-            float distanceToPlayer = Vector3.Distance(mainParent.transform.position, player.transform.position); 
+            float distanceToPlayer = Vector3.Distance(mainParent.transform.position, player.transform.position);
+
             if (!changeMarker && distanceToPlayer <= markerDistance)
             {
                 changeMarker = true;
                 playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
                 playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
             }
+
             if (distanceToPlayer <= attackDistance) break;
             yield return null;
         }
 
         // Trigger attack
         changeMarker = false;
-        if (animTriggerAttack != "") animator.SetTrigger(animTriggerAttack);
-        if (prefabAttack != null) Invoke("Attack", animWaitTime);
+
+        if (animTriggerAttack != "")
+            animator.SetTrigger(animTriggerAttack);
+
+        if (prefabAttack != null)
+            Invoke("Attack", animWaitTime);
     }
 
     void CreateEffect()
@@ -86,7 +110,6 @@ public class JumpAttack : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
         createdEffect = Instantiate(prefabEffect, spawnPosition, lookRotation, mainParent.transform);
     }
-
 
     void Attack()
     {

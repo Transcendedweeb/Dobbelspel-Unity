@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class ChargePlayer : MonoBehaviour
 {
+    [Header("Object References")]
     public GameObject mainParent;
+    public GameObject player;
+
+    [Header("Prefab Settings")]
     public GameObject prefab;
     public Vector3 prefabPositionOffset;
     public Vector3 prefabRotationOffset;
-    public GameObject player;
+
+    [Header("Movement Settings")]
     public float movementSpeed = 5f;
     public float minDistance = .5f;
-    public string animBoolName = "";
     public float durationInSeconds = 5f;
+
+    [Header("Animation Settings")]
+    public string animBoolName = "";
     public float finalWaitTime = .1f;
+
+    [Header("Behavior Options")]
     public bool quickReset = false;
+
+    // Private fields
     Animator animator;
     BossAI bossAI;
     GameObject instantiatedPrefab;
@@ -24,9 +35,15 @@ public class ChargePlayer : MonoBehaviour
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
 
-        if (animBoolName != "") animator.SetBool(animBoolName, true);
-        if (prefab != null) InvokePrefab();
-        if (quickReset) bossAI.InvokeReset();
+        if (animBoolName != "")
+            animator.SetBool(animBoolName, true);
+
+        if (prefab != null)
+            InvokePrefab();
+
+        if (quickReset)
+            bossAI.InvokeReset();
+
         StartCoroutine(Move());
     }
 
@@ -41,14 +58,16 @@ public class ChargePlayer : MonoBehaviour
             if (distanceToPlayer > minDistance)
             {
                 Vector3 direction = (player.transform.position - transform.position).normalized;
-                mainParent.transform.position += direction * movementSpeed * Time.deltaTime;
+                mainParent.transform.position += movementSpeed * Time.deltaTime * direction;
             }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        if (animBoolName != "") animator.SetBool(animBoolName, false);
+        if (animBoolName != "")
+            animator.SetBool(animBoolName, false);
+
         Invoke("End", finalWaitTime);
     }
 
@@ -64,8 +83,12 @@ public class ChargePlayer : MonoBehaviour
 
     void End()
     {
-        if (instantiatedPrefab != null) Destroy(instantiatedPrefab);
-        if (!quickReset) bossAI.InvokeReset();
+        if (instantiatedPrefab != null)
+            Destroy(instantiatedPrefab);
+
+        if (!quickReset)
+            bossAI.InvokeReset();
+
         this.gameObject.SetActive(false);
     }
 }

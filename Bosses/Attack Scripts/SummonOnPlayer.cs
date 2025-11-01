@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class SummonOnPlayer : MonoBehaviour
 {
+    [Header("Object References")]
     public GameObject boss;
     public GameObject prefab;
     public GameObject player;
-    public float initialWaitTime = 0f;
+
+    [Header("Spawn Settings")]
     public int projectileCount = 1;
-    public float cooldown = 0f;
     public float fixedYPosition = 0f;
+
+    [Header("Timing Settings")]
+    public float initialWaitTime = 0f;
+    public float cooldown = 0f;
+
+    [Header("Animation Settings")]
     public string animTriggerName = "";
+
+    [Header("Behavior Options")]
     public bool quickReset = false;
+
+    // Private fields
     BossAI bossAI;
     Animator animator;
 
@@ -20,7 +31,10 @@ public class SummonOnPlayer : MonoBehaviour
     {
         bossAI = boss.GetComponent<BossAI>();
         animator = boss.GetComponent<Animator>();
-        if (quickReset) bossAI.InvokeReset();
+
+        if (quickReset)
+            bossAI.InvokeReset();
+
         Invoke(nameof(StartCoroutineCall), initialWaitTime);
     }
 
@@ -31,7 +45,9 @@ public class SummonOnPlayer : MonoBehaviour
 
     IEnumerator Main()
     {
-        if (animTriggerName != "") animator.SetTrigger(animTriggerName);
+        if (animTriggerName != "")
+            animator.SetTrigger(animTriggerName);
+
         for (int i = 0; i < projectileCount; i++)
         {
             Vector3 spawnPosition = new Vector3(
@@ -41,11 +57,12 @@ public class SummonOnPlayer : MonoBehaviour
             );
 
             Instantiate(prefab, spawnPosition, Quaternion.identity);
-
             yield return new WaitForSeconds(cooldown);
         }
 
-        if (!quickReset) bossAI.InvokeReset();
+        if (!quickReset)
+            bossAI.InvokeReset();
+
         this.gameObject.SetActive(false);
     }
 }

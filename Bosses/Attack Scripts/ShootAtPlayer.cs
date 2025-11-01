@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class ShootAtPlayer : MonoBehaviour
 {
+    [Header("Object References")]
     public GameObject prefab;
     public GameObject muzzle;
     public GameObject playerMarker;
+    public BossAI bossAI;
+    public Animator animator;
+
+    [Header("Timing Settings")]
     public float waitTime = 1f;
     public float reactionTime = 1f;
     public float shotTime = 1f;
+
+    [Header("Shooting Settings")]
     public float projectileCount = 1f;
+
+    [Header("Animation Settings")]
     public string animName = "";
+
+    [Header("Behavior Options")]
     public bool quickReset = false;
-    public BossAI bossAI;
-    public Animator animator;
+
+    // Private fields
     ChangeEffectColor changeEffectColor;
 
     void Start()
@@ -28,14 +39,19 @@ public class ShootAtPlayer : MonoBehaviour
         changeEffectColor = playerMarker.GetComponent<ChangeEffectColor>();
         changeEffectColor.effectColor = Color.white;
         changeEffectColor.ApplyColorToChildren();
-        if (quickReset) bossAI.InvokeReset();
+
+        if (quickReset)
+            bossAI.InvokeReset();
+
         playerMarker.SetActive(true);
         StartCoroutine(Main());
     }
 
     IEnumerator Main()
     {
-        if (animName != "") animator.SetBool(animName, true);
+        if (animName != "")
+            animator.SetBool(animName, true);
+
         yield return new WaitForSeconds(waitTime);
 
         changeEffectColor.effectColor = Color.red;
@@ -56,8 +72,12 @@ public class ShootAtPlayer : MonoBehaviour
 
     void End()
     {
-        if (animName != "") animator.SetBool(animName, false);
-        if (!quickReset) bossAI.InvokeReset();
+        if (animName != "")
+            animator.SetBool(animName, false);
+
+        if (!quickReset)
+            bossAI.InvokeReset();
+
         playerMarker.SetActive(false);
         this.gameObject.SetActive(false);
     }

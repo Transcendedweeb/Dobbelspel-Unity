@@ -152,7 +152,6 @@ public class WindupDashAttack : MonoBehaviour
         if (lockOn != null)
         {
             lockOn.enabled = set;
-            Debug.Log($"[WindupDashAttack] LockOn {(set ? "enabled" : "disabled")}.");
         }
         else
         {

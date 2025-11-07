@@ -32,9 +32,12 @@ public class BossAI : MonoBehaviour
     public AttackSequence[] attackSequences;
     public SpecialAttack specialAttack;
     public GameObject melee;
-    public GameObject player;
     public float closeDistance = 5f;
     public float startWaitTime = 0f;
+
+    [Header("Global Player Information")]
+    public GameObject player;
+    public GameObject playerMarker;
 
     [HideInInspector] public bool attacking = true;
 

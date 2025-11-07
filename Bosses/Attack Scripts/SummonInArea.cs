@@ -5,7 +5,6 @@ using UnityEngine;
 public class SummonInArea : MonoBehaviour
 {
     [Header("Object References")]
-    public GameObject boss;
     public GameObject prefab;
     public Transform center;
 
@@ -28,9 +27,12 @@ public class SummonInArea : MonoBehaviour
     // Private fields
     BossAI bossAI;
     Animator animator;
+    GameObject boss;
 
     void OnEnable()
     {
+        boss = transform.root.gameObject;
+
         bossAI = boss.GetComponent<BossAI>();
         animator = boss.GetComponent<Animator>();
 

@@ -5,9 +5,7 @@ using UnityEngine;
 public class WindupDashAttack : MonoBehaviour
 {
     [Header("Object References")]
-    public GameObject mainParent;
     public GameObject prefab;
-    public GameObject player;
 
     [Header("Windup (Start)")]
     public string windupAnimTrigger = "Windup";
@@ -30,24 +28,23 @@ public class WindupDashAttack : MonoBehaviour
     public float animWaitTimeAfterArrival = 0.1f;
     public float endWaitTime = 0f;
 
-    private Animator animator;
-    private BossAI bossAI;
-    private LockOn lockOn;
-    private Vector3 recordedTargetPosition;
-    private bool isDashing = false;
+    Animator animator;
+    BossAI bossAI;
+    LockOn lockOn;
+    Vector3 recordedTargetPosition;
+    GameObject mainParent;
+    GameObject player;
+    bool isDashing = false;
 
     void OnEnable()
     {
-        if (mainParent != null)
-        {
-            animator = mainParent.GetComponent<Animator>();
-            bossAI = mainParent.GetComponent<BossAI>();
-            lockOn = mainParent.GetComponentInChildren<LockOn>();
-        }
-        else
-        {
-            Debug.LogWarning("WindupDashAttack: mainParent is not assigned.");
-        }
+        mainParent = transform.root.gameObject;
+
+        animator = mainParent.GetComponent<Animator>();
+        bossAI = mainParent.GetComponent<BossAI>();
+        lockOn = mainParent.GetComponentInChildren<LockOn>();
+
+        player = bossAI.player;
 
         if (quickReset && bossAI != null)
         {

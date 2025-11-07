@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class ChargePlayer : MonoBehaviour
 {
-    [Header("Object References")]
-    public GameObject mainParent;
-    public GameObject player;
-
     [Header("Prefab Settings")]
     public GameObject prefab;
     public Vector3 prefabPositionOffset;
@@ -25,15 +21,20 @@ public class ChargePlayer : MonoBehaviour
     [Header("Behavior Options")]
     public bool quickReset = false;
 
-    // Private fields
     Animator animator;
     BossAI bossAI;
     GameObject instantiatedPrefab;
+    GameObject mainParent;
+    GameObject player;
 
     void OnEnable()
     {
+        mainParent = transform.root.gameObject;
+
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
+
+        player = bossAI.player;
 
         if (animBoolName != "")
             animator.SetBool(animBoolName, true);

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootAtPlayer : MonoBehaviour
@@ -7,8 +6,6 @@ public class ShootAtPlayer : MonoBehaviour
     [Header("Object References")]
     public GameObject prefab;
     public GameObject muzzle;
-    public GameObject playerMarker;
-    public BossAI bossAI;
     public Animator animator;
 
     [Header("Timing Settings")]
@@ -25,8 +22,9 @@ public class ShootAtPlayer : MonoBehaviour
     [Header("Behavior Options")]
     public bool quickReset = false;
 
-    // Private fields
     ChangeEffectColor changeEffectColor;
+    GameObject playerMarker;
+    BossAI bossAI;
 
     void Start()
     {
@@ -36,6 +34,9 @@ public class ShootAtPlayer : MonoBehaviour
 
     void OnEnable()
     {
+        bossAI = transform.root.gameObject.GetComponent<BossAI>();
+        playerMarker = bossAI.playerMarker;
+
         changeEffectColor = playerMarker.GetComponent<ChangeEffectColor>();
         changeEffectColor.effectColor = Color.white;
         changeEffectColor.ApplyColorToChildren();

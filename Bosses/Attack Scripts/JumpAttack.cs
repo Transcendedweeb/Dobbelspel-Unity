@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class JumpAttack : MonoBehaviour
 {
-    [Header("Object References")]
-    public GameObject mainParent;
-    public GameObject player;
-    public GameObject playerMarker;
-
     [Header("Effect Settings")]
     public GameObject prefabEffect;
     public Vector3 positionOffsetEffect;
@@ -34,18 +29,31 @@ public class JumpAttack : MonoBehaviour
     [Header("Behavior Options")]
     public bool quickReset = false;
 
-    // Private fields
+    [Header("Advanced Dash Behavior")]
+    public bool useLastKnownPosition = false;
+    public Vector3 lastPositionOffset;
+
     bool changeMarker = false;
     Animator animator;
     BossAI bossAI;
     float groundY;
     GameObject createdEffect;
+    Vector3 lastKnownPosition;
+    GameObject mainParent;
+    GameObject player;
+    GameObject playerMarker;
+
 
     void OnEnable()
     {
+        mainParent = transform.root.gameObject;
+
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
         groundY = mainParent.transform.position.y;
+
+        player = bossAI.player;
+        playerMarker = bossAI.playerMarker;
 
         if (quickReset) bossAI.InvokeReset();
 
@@ -59,7 +67,6 @@ public class JumpAttack : MonoBehaviour
 
     IEnumerator Main()
     {
-        // Jumping upwards
         while (mainParent.transform.position.y < groundY + jumpDistance)
         {
             Vector3 direction = new Vector3(0, 1, 0);
@@ -67,40 +74,51 @@ public class JumpAttack : MonoBehaviour
             yield return null;
         }
 
-        // Preparing for dash
         playerMarker.SetActive(true);
         playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
         playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
 
         if (prefabEffect != null) CreateEffect();
 
-        // Dashing towards the player
+        if (useLastKnownPosition)
+        {
+            lastKnownPosition = player.transform.position + lastPositionOffset;
+        }
+
         while (true)
         {
-            Vector3 direction = (player.transform.position - mainParent.transform.position).normalized;
+            Vector3 targetPosition;
+
+            if (useLastKnownPosition)
+                targetPosition = lastKnownPosition;
+            else
+                targetPosition = player.transform.position;
+
+            Vector3 direction = (targetPosition - mainParent.transform.position).normalized;
             mainParent.transform.position += direction * dashSpeed * Time.deltaTime;
 
-            float distanceToPlayer = Vector3.Distance(mainParent.transform.position, player.transform.position);
+            float distanceToTarget = Vector3.Distance(mainParent.transform.position, targetPosition);
 
-            if (!changeMarker && distanceToPlayer <= markerDistance)
+            if (!changeMarker && distanceToTarget <= markerDistance)
             {
                 changeMarker = true;
                 playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
                 playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
             }
 
-            if (distanceToPlayer <= attackDistance) break;
+            if (distanceToTarget <= attackDistance)
+                break;
+
             yield return null;
         }
 
-        // Trigger attack
         changeMarker = false;
 
         if (animTriggerAttack != "")
             animator.SetTrigger(animTriggerAttack);
 
         if (prefabAttack != null)
-            Invoke("Attack", animWaitTime);
+            Invoke(nameof(Attack), animWaitTime);
     }
 
     void CreateEffect()
@@ -113,26 +131,22 @@ public class JumpAttack : MonoBehaviour
 
     void Attack()
     {
-        // If prefabEffect was created, destroy it
         if (createdEffect != null)
         {
             Destroy(createdEffect);
         }
 
-        // Force the mainParent to return to the ground
         Vector3 groundPosition = new Vector3(mainParent.transform.position.x, groundY, mainParent.transform.position.z);
         mainParent.transform.position = groundPosition;
 
         playerMarker.SetActive(false);
 
-        // Spawn the attack prefab with position and rotation offsets
         Vector3 spawnPosition = gameObject.transform.position + positionOffsetAttack;
         Vector3 directionToPlayer = (player.transform.position - spawnPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer) * Quaternion.Euler(positionOffsetRotationAttack);
 
         Instantiate(prefabAttack, spawnPosition, lookRotation);
 
-        // Wait before ending
         Invoke("End", endWaitTime);
     }
 

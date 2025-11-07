@@ -5,9 +5,7 @@ using UnityEngine;
 public class SummonOnPlayer : MonoBehaviour
 {
     [Header("Object References")]
-    public GameObject boss;
     public GameObject prefab;
-    public GameObject player;
 
     [Header("Spawn Settings")]
     public int projectileCount = 1;
@@ -26,11 +24,17 @@ public class SummonOnPlayer : MonoBehaviour
     // Private fields
     BossAI bossAI;
     Animator animator;
+    GameObject boss;
+    GameObject player;
 
     void OnEnable()
     {
+        boss = transform.root.gameObject;
+
         bossAI = boss.GetComponent<BossAI>();
         animator = boss.GetComponent<Animator>();
+
+        player = bossAI.player;
 
         if (quickReset)
             bossAI.InvokeReset();

@@ -5,10 +5,7 @@ using UnityEngine;
 public class DashAndAttack : MonoBehaviour
 {
     [Header("Object References")]
-    public GameObject mainParent;
     public GameObject prefab;
-    public GameObject player;
-    public GameObject playerMarker;
 
     [Header("Position & Rotation Offsets")]
     public Vector3 positionOffset;
@@ -31,11 +28,20 @@ public class DashAndAttack : MonoBehaviour
     bool changeMarker = false;
     Animator animator;
     BossAI bossAI;
+    GameObject mainParent;
+    GameObject player;
+    GameObject playerMarker;
+
 
     void OnEnable()
     {
+        mainParent = transform.root.gameObject;
+
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
+
+        player = bossAI.player;
+        playerMarker = bossAI.playerMarker;
 
         if (quickReset) bossAI.InvokeReset();
         playerMarker.SetActive(true);

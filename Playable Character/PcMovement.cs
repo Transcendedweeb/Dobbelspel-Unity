@@ -83,7 +83,7 @@ public class PcMovement : MonoBehaviour
                 moveDirection = Vector3.zero;
                 lastMov = "None";
                 modelAnim.SetInteger("Lean position", (int)MovementState.idle);
-                PlaySfx.StopSFX(movingAudioSource, movingSFX);
+                DisableSFX();
                 return;
         }
 
@@ -103,5 +103,16 @@ public class PcMovement : MonoBehaviour
             relativeMoveDirection.y = gravity;
             characterController.Move(relativeMoveDirection * moveSpeed * Time.deltaTime);
         }
+    }
+
+    public void DisableLeanPosition()
+    {
+        modelAnim.SetInteger("Lean position", -1);
+        DisableSFX();
+    }
+
+    public void DisableSFX()
+    {
+        PlaySfx.StopSFX(movingAudioSource, movingSFX);
     }
 }

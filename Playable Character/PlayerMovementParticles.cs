@@ -65,7 +65,7 @@ public class PlayerMovementParticles : MonoBehaviour
         PlaySfx.PlaySFX(startBoostersSFX, boostersSource);
     }
 
-    void DisableActiveParticles()
+    public void DisableActiveParticles()
     {
         if (!activeParticles.Any()) return;
 

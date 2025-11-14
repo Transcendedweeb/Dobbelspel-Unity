@@ -8,6 +8,8 @@ public class EventCard
     public string title;
     [TextArea(2,5)]
     public string description;
+    public int count = 1;
+    public bool isItem = false;
 }
 
 public class EventDisplayHandler : MonoBehaviour
@@ -20,9 +22,13 @@ public class EventDisplayHandler : MonoBehaviour
     private bool buttonHoldFlag = true;
 
     [Header("Deck Settings")]
-    [Tooltip("Stel hier je kaarten in via de Inspector")]
-    public List<EventCard> deck = new List<EventCard>();
+    public List<EventCard> cardTemplates = new List<EventCard>();
 
+    [Header("Card Colors")]
+    public Color eventCardTitleColor = Color.white;
+    public Color itemCardTitleColor = Color.yellow;
+
+    private List<EventCard> deck = new List<EventCard>();
     private List<EventCard> discardPile = new List<EventCard>();
 
     private const string DeckKey = "CardDeck_Save";
@@ -37,6 +43,11 @@ public class EventDisplayHandler : MonoBehaviour
         Invoke(nameof(ReleaseButton), buttonHoldTime);
 
         LoadDeckState();
+
+        if (!PlayerPrefs.HasKey(DeckKey) && cardTemplates.Count > 0)
+        {
+            InitializeDeckFromTemplates();
+        }
 
         if (deck.Count == 0 && discardPile.Count > 0)
         {
@@ -82,6 +93,33 @@ public class EventDisplayHandler : MonoBehaviour
 
     // -------------------- CARD HANDLING --------------------
 
+    void InitializeDeckFromTemplates()
+    {
+        deck.Clear();
+        discardPile.Clear();
+
+        foreach (EventCard template in cardTemplates)
+        {
+            int cardCount = Mathf.Max(1, template.count);
+            
+            for (int i = 0; i < cardCount; i++)
+            {
+                EventCard card = new EventCard
+                {
+                    title = template.title,
+                    description = template.description,
+                    count = template.count,
+                    isItem = template.isItem
+                };
+                deck.Add(card);
+            }
+        }
+
+        Shuffle(deck);
+        SaveDeckState();
+        Debug.Log($"Deck initialized with {deck.Count} cards from {cardTemplates.Count} unique templates");
+    }
+
     void DrawAndDisplayCard()
     {
         if (deck.Count > 0)
@@ -94,6 +132,8 @@ public class EventDisplayHandler : MonoBehaviour
 
             title.text = card.title;
             description.text = card.description;
+
+            title.color = card.isItem ? itemCardTitleColor : eventCardTitleColor;
 
             SaveDeckState();
         }

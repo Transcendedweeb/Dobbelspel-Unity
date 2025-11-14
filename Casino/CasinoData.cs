@@ -58,7 +58,6 @@ public class CasinoData : MonoBehaviour
         }
 
         createQuestions.Load();
-        // LogQuizData();
     }
 
     // Method to add a question to the quiz data
@@ -92,32 +91,5 @@ public class CasinoData : MonoBehaviour
         }
         Debug.LogError("No questions found for specified subject and level.");
         return null;
-    }
-
-    void LogQuizData()
-    {
-        Debug.Log("Printing the entire quizData structure:");
-        foreach (var subjectPair in quizData)
-        {
-            Subject subject = subjectPair.Key;
-            Debug.Log($"Subject: {subject}");
-            
-            foreach (var levelPair in subjectPair.Value)
-            {
-                Level level = levelPair.Key;
-                Debug.Log($"  Level: {level}");
-                
-                foreach (var question in levelPair.Value)
-                {
-                    Debug.Log($"    Question: {question.questionText}");
-                    for (int i = 0; i < question.answers.Count; i++)
-                    {
-                        string answerText = question.answers[i];
-                        bool isCorrect = (i == question.correctAnswerIndex);
-                        Debug.Log($"      Answer {i + 1}: {answerText} {(isCorrect ? "(Correct)" : "")}");
-                    }
-                }
-            }
-        }
     }
 }

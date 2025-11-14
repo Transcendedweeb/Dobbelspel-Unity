@@ -65,7 +65,5 @@
             question = selectedQuestion.questionText;
             answers = selectedQuestion.answers;
             correctAnswerIndex = selectedQuestion.correctAnswerIndex;
-
-            Debug.Log($"Question set: {question} (Correct Answer Index: {correctAnswerIndex})");
         }
     }

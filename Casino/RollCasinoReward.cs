@@ -65,45 +65,48 @@ public class RollCasinoReward : MonoBehaviour
 
    public void RollChance(int level)
    {
-        int roll = Random.Range(0, 101);
+        // Use Random.Range(1, 101) to get 1-100 (100 possible values)
+        // This allows for exact percentage splits (e.g., 60/40)
+        int roll = Random.Range(1, 101);
+        
         switch (level)
         {
-            case 0:
-                if (roll <= 5) // gold
+            case 0: // Bronze (Level 1)
+                if (roll <= 5) // gold - 5% chance (1-5)
                 {
                     if (vfxGold != null) vfxGold.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
-                else if (roll <= 35) // silver
+                else if (roll <= 35) // silver - 30% chance (6-35)
                 {
                     if (vfxSilver != null) vfxSilver.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 4eu verdient";
                 }
-                else // bronze
+                else // bronze - 65% chance (36-100)
                 {
                     if (vfxBronze != null) vfxBronze.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 3eu verdient";
                 }
                 break;
-            case 1:
-                if (roll <= 60) // silver
+            case 1: // Silver (Level 2)
+                if (roll <= 60) // silver - 60% chance (1-60)
                 {
                     if (vfxSilver != null) vfxSilver.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 4eu verdient";
                 }
-                else // gold
+                else // gold - 40% chance (61-100)
                 {
                     if (vfxGold != null) vfxGold.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
                 break;
-            default:
-                if (roll <= 55) // gold
+            default: // Gold (Level 3)
+                if (roll <= 55) // gold - 55% chance (1-55)
                 {
                     if (vfxGold != null) vfxGold.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
-                else // epic
+                else // epic - 45% chance (56-100)
                 {
                     if (vfxPurple != null) vfxPurple.SetActive(true);
                     if (RewardText != null) RewardText.text = "Je hebt 8eu of 4eu en een casino cadeau verdient";
@@ -147,12 +150,9 @@ public class RollCasinoReward : MonoBehaviour
                 if (endingIcons != null) Destroy(endingIcons);
                 
                 // Use stored level (convert from 1-3 to 0-2 for RollChance)
-                int levelToUse = storedLevel - 1; // Convert to 0-based index (1->0, 2->1, 3->2)
-                CasinoUi casinoUi = this.GetComponent<CasinoUi>();
-                if (casinoUi != null && casinoUi.enabled)
-                {
-                    levelToUse = casinoUi.currentIndex;
-                }
+                // storedLevel: 1=Bronze, 2=Silver, 3=Gold
+                // levelToUse: 0=Bronze, 1=Silver, 2=Gold
+                int levelToUse = storedLevel - 1;
                 
                 RollChance(levelToUse);
                 Animator animator = this.gameObject.GetComponent<Animator>();

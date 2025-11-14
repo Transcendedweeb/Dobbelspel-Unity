@@ -30,6 +30,48 @@ public class FailSave : MonoBehaviour
         SceneManager.LoadScene("Main Scene");
     }
 
+    void StartCasino()
+    {
+        Debug.LogWarning("Starting casino");
+        CenterCameraHandler centerCameraHandler = FindObjectOfType<CenterCameraHandler>();
+        if (centerCameraHandler != null && centerCameraHandler.casino != null)
+        {
+            ChangeCamera changeCamera = centerCameraHandler.GetComponent<ChangeCamera>();
+            if (changeCamera != null)
+            {
+                changeCamera.ChangeToSpecificCam(centerCameraHandler.casino);
+            }
+        }
+    }
+
+    void StartColloseum()
+    {
+        Debug.LogWarning("Starting colloseum/penalty shootout");
+        CenterCameraHandler centerCameraHandler = FindObjectOfType<CenterCameraHandler>();
+        if (centerCameraHandler != null && centerCameraHandler.colloseum != null)
+        {
+            ChangeCamera changeCamera = centerCameraHandler.GetComponent<ChangeCamera>();
+            if (changeCamera != null)
+            {
+                changeCamera.ChangeToSpecificCam(centerCameraHandler.colloseum);
+            }
+        }
+    }
+
+    void StartRoulette()
+    {
+        Debug.LogWarning("Starting roulette");
+        CenterCameraHandler centerCameraHandler = FindObjectOfType<CenterCameraHandler>();
+        if (centerCameraHandler != null && centerCameraHandler.roulette != null)
+        {
+            ChangeCamera changeCamera = centerCameraHandler.GetComponent<ChangeCamera>();
+            if (changeCamera != null)
+            {
+                changeCamera.ChangeToSpecificCam(centerCameraHandler.roulette);
+            }
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -55,6 +97,18 @@ public class FailSave : MonoBehaviour
             {
                 serialReader.Dobbel();
             }
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            StartCasino();
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            StartColloseum();
+        }
+        else if (Input.GetKeyDown(KeyCode.U))
+        {
+            StartRoulette();
         }
     }
 }

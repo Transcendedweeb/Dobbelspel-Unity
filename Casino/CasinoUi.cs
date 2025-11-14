@@ -9,6 +9,7 @@ public class CasinoUi : MonoBehaviour
     WriteQuestionOnScreen wq;
     public GameObject[] menuOptions;
     public int currentIndex = 0;
+    public int selectedLevel = 1; // Store the selected level for RollCasinoReward
     bool isHandlingInput = false;
     bool infoMenu = false;
     public float inputCooldown = 0.5f;
@@ -89,16 +90,27 @@ public class CasinoUi : MonoBehaviour
         switch (currentIndex)
         {
             case 0:
+                selectedLevel = 1;
                 getQuestion.Set(setCasinoSelections.bronzeText.text, 1);
                 break;
             case 1:
+                selectedLevel = 2;
                 getQuestion.Set(setCasinoSelections.silverText.text, 2);
                 break;
             default:
+                selectedLevel = 3;
                 getQuestion.Set(setCasinoSelections.goldText.text, 3);
                 break;
         }
         wq.WriteText(getQuestion.question, getQuestion.answers, getQuestion.correctAnswerIndex);
+        
+        // Store the level in RollCasinoReward
+        RollCasinoReward reward = this.GetComponent<RollCasinoReward>();
+        if (reward != null)
+        {
+            reward.SetLevel(selectedLevel);
+        }
+        
         this.enabled = false;
     }
 

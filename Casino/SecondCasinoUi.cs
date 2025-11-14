@@ -42,7 +42,14 @@ public class SecondCasinoUi : MonoBehaviour
         }
         else if (ArduinoDataManager.Instance.ButtonAPressed)
         {
-            mainGo.GetComponent<RollCasinoReward>().CheckVictroy(count);
+            if (mainGo != null)
+            {
+                RollCasinoReward reward = mainGo.GetComponent<RollCasinoReward>();
+                if (reward != null)
+                {
+                    reward.CheckVictroy(count);
+                }
+            }
         }
     }
 
@@ -58,7 +65,15 @@ public class SecondCasinoUi : MonoBehaviour
 
     void ChangeColor(Color color)
     {
-        scrollableList[count].GetComponent<Image>().color = color;
+        if (scrollableList == null || count < 0 || count >= scrollableList.Count || scrollableList[count] == null)
+        {
+            return;
+        }
+        Image img = scrollableList[count].GetComponent<Image>();
+        if (img != null)
+        {
+            img.color = color;
+        }
     }
 
     void ResetJoystick()

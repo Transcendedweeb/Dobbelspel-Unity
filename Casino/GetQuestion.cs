@@ -34,11 +34,20 @@
 
             List<CasinoData.Question> questions = casinoData.GetQuestions(subjectEnum, levelEnum);
 
+            if (questions == null || questions.Count == 0)
+            {
+                Debug.LogError($"No questions available for subject '{subject}' and level '{level}'.");
+                return;
+            }
+
             // Genereer een unieke sleutel voor deze combinatie van subject en level
             string key = $"{subject}Index{level}";
 
             // Haal de huidige index op (default 0 als deze nog niet bestaat)
             int levelIndex = PlayerPrefs.GetInt(key, 0);
+
+            // Wrap around if index exceeds available questions
+            levelIndex = levelIndex % questions.Count;
 
             // Werk de index bij en sla deze op
             PlayerPrefs.SetInt(key, levelIndex + 1);
@@ -46,6 +55,12 @@
 
             // Selecteer de vraag
             CasinoData.Question selectedQuestion = questions[levelIndex];
+
+            if (selectedQuestion == null || selectedQuestion.answers == null || selectedQuestion.answers.Count != 4)
+            {
+                Debug.LogError("Invalid question data.");
+                return;
+            }
 
             question = selectedQuestion.questionText;
             answers = selectedQuestion.answers;

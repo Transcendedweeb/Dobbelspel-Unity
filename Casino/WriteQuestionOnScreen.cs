@@ -16,13 +16,19 @@ public class WriteQuestionOnScreen : MonoBehaviour
 
     public void WriteText(string q, List<string> aList, int i)
     {
+        if (aList == null || aList.Count < 4)
+        {
+            Debug.LogError("Invalid answers list provided.");
+            return;
+        }
+
         correctIndex = i;
-        canvasNext.SetActive(true);
-        Destroy(canvasSubject);
-        questionText.text = q;
-        aText.text = aList[0];
-        bText.text = aList[1];
-        cText.text = aList[2];
-        dText.text = aList[3];
+        if (canvasNext != null) canvasNext.SetActive(true);
+        if (canvasSubject != null) Destroy(canvasSubject);
+        if (questionText != null) questionText.text = q;
+        if (aText != null) aText.text = aList[0];
+        if (bText != null) bText.text = aList[1];
+        if (cText != null) cText.text = aList[2];
+        if (dText != null) dText.text = aList[3];
     }
 }

@@ -16,26 +16,51 @@ public class RollCasinoReward : MonoBehaviour
    public GameObject vfxGold;
    public GameObject vfxPurple;
    public TextMeshProUGUI RewardText;
+   public TextMeshProUGUI CorrectAnswerText; // New text to show the correct answer
 
    bool end = false;
    bool defeat = false;
    bool con = false;
    bool rolled = false;
+   int storedLevel = 1; // Store the level index
 
    public void CheckVictroy(int choice)
    {
-        questionCanvas.SetActive(false);
-        int correctIndex = this.GetComponent<WriteQuestionOnScreen>().correctIndex;
+        if (questionCanvas != null) questionCanvas.SetActive(false);
+        
+        WriteQuestionOnScreen wq = this.GetComponent<WriteQuestionOnScreen>();
+        if (wq == null)
+        {
+            Debug.LogError("WriteQuestionOnScreen component not found.");
+            return;
+        }
+
+        int correctIndex = wq.correctIndex;
+        GetQuestion gq = this.GetComponent<GetQuestion>();
+        
+        // Display the correct answer
+        if (CorrectAnswerText != null && gq != null && gq.answers != null && correctIndex >= 0 && correctIndex < gq.answers.Count)
+        {
+            string correctAnswer = gq.answers[correctIndex];
+            CorrectAnswerText.text = $"Correct antwoord: {correctAnswer}";
+            CorrectAnswerText.gameObject.SetActive(true);
+        }
+
         if (choice == correctIndex)
         {
             con = true;
-            completeIcon.SetActive(true);
+            if (completeIcon != null) completeIcon.SetActive(true);
         }
         else
         {
             defeat = true;
-            defeatIcon.SetActive(true);
+            if (defeatIcon != null) defeatIcon.SetActive(true);
         }
+   }
+
+   public void SetLevel(int level)
+   {
+        storedLevel = level;
    }
 
    public void RollChance(int level)
@@ -46,42 +71,42 @@ public class RollCasinoReward : MonoBehaviour
             case 0:
                 if (roll <= 5) // gold
                 {
-                    vfxGold.SetActive(true);
-                    RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
+                    if (vfxGold != null) vfxGold.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
                 else if (roll <= 35) // silver
                 {
-                    vfxSilver.SetActive(true);
-                    RewardText.text = "Je hebt 4eu verdient";
+                    if (vfxSilver != null) vfxSilver.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 4eu verdient";
                 }
                 else // bronze
                 {
-                    vfxBronze.SetActive(true);
-                    RewardText.text = "Je hebt 3eu verdient";
+                    if (vfxBronze != null) vfxBronze.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 3eu verdient";
                 }
                 break;
             case 1:
                 if (roll <= 60) // silver
                 {
-                    vfxSilver.SetActive(true);
-                    RewardText.text = "Je hebt 4eu verdient";
+                    if (vfxSilver != null) vfxSilver.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 4eu verdient";
                 }
                 else // gold
                 {
-                    vfxGold.SetActive(true);
-                    RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
+                    if (vfxGold != null) vfxGold.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
                 break;
             default:
                 if (roll <= 55) // gold
                 {
-                    vfxGold.SetActive(true);
-                    RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
+                    if (vfxGold != null) vfxGold.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 6eu of een casino cadeau verdient";
                 }
                 else // epic
                 {
-                    vfxPurple.SetActive(true);
-                    RewardText.text = "Je hebt 8eu of 4eu en een casino cadeau verdient";
+                    if (vfxPurple != null) vfxPurple.SetActive(true);
+                    if (RewardText != null) RewardText.text = "Je hebt 8eu of 4eu en een casino cadeau verdient";
                 }
                 break;
         }
@@ -119,9 +144,19 @@ public class RollCasinoReward : MonoBehaviour
             {
                 rolled = true;
                 ArduinoDataManager.Instance.ResetButtonStates();
-                Destroy(endingIcons);
-                RollChance(this.GetComponent<CasinoUi>().currentIndex);
-                this.gameObject.GetComponent<Animator>().SetTrigger("Walk");
+                if (endingIcons != null) Destroy(endingIcons);
+                
+                // Use stored level (convert from 1-3 to 0-2 for RollChance)
+                int levelToUse = storedLevel - 1; // Convert to 0-based index (1->0, 2->1, 3->2)
+                CasinoUi casinoUi = this.GetComponent<CasinoUi>();
+                if (casinoUi != null && casinoUi.enabled)
+                {
+                    levelToUse = casinoUi.currentIndex;
+                }
+                
+                RollChance(levelToUse);
+                Animator animator = this.gameObject.GetComponent<Animator>();
+                if (animator != null) animator.SetTrigger("Walk");
             }
         }
    }

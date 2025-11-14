@@ -13,6 +13,12 @@ public class SetCasinoSelections : MonoBehaviour
     int bronzeIndex;
     int silverIndex;
     int goldIndex;
+
+    void Start()
+    {
+        Roll();
+    }
+
     void Roll()
     {
         if (subjects.Length == 0)
@@ -54,7 +60,7 @@ public class SetCasinoSelections : MonoBehaviour
     {
         List<int> numbers = new List<int>();
 
-        for (int i = min; i < max; i++)
+        for (int i = min; i <= max; i++)
         {
             numbers.Add(i);
         }

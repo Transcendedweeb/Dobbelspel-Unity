@@ -10,6 +10,7 @@ public class CenterCameraHandler : MonoBehaviour
     public GameObject canvasMenu;
     public GameObject menuText1;
     public GameObject menuText2;
+    public GameObject menuText3;
     public GameObject dealer;
     public GameObject colloseum;
     public GameObject roulette;
@@ -19,8 +20,10 @@ public class CenterCameraHandler : MonoBehaviour
     int sceneCount = 0;
     int menuIndexCount = 0;
     bool isHandlingButtonPress = false;
+    int selectedMissionIndex = -1;
     GameObject[] arrayText1;
     GameObject[] arrayText2;
+    GameObject[] arrayText3;
     GameObject selectedGameObject;
     ChangeCamera changeCamera;
 
@@ -29,8 +32,11 @@ public class CenterCameraHandler : MonoBehaviour
         sceneCount = 0;
         menuIndexCount = 0;
         isHandlingButtonPress = false;
+        selectedMissionIndex = -1;
         InitializeMenu(arrayText1);
         menuText1.SetActive(true);
+        if (menuText2 != null) menuText2.SetActive(false);
+        if (menuText3 != null) menuText3.SetActive(false);
         canvasIdle.SetActive(true);
         canvasMenu.SetActive(false);
         canvasEvent.SetActive(false);
@@ -85,8 +91,16 @@ public class CenterCameraHandler : MonoBehaviour
             case 2:
                 menuText1.SetActive(true);
                 menuText2.SetActive(false);
+                if (menuText3 != null) menuText3.SetActive(false);
                 sceneCount--;
                 InitializeMenu(arrayText1);
+                break;
+            case 3:
+                menuText2.SetActive(true);
+                menuText3.SetActive(false);
+                sceneCount--;
+                InitializeMenu(arrayText2);
+                selectedMissionIndex = -1;
                 break;
             default:
                 break;
@@ -121,23 +135,51 @@ public class CenterCameraHandler : MonoBehaviour
                     break;
             }
         }
-        else
+        else if (sceneCount == 2)
         {
-            switch (menuIndexCount)
-            {
-                case 0:
-                    SceneManager.LoadScene("Mission 1 - space");
-                    break;
-                case 1:
-                    SceneManager.LoadScene("Mission 2 - snow");
-                    break;
-                case 2:
-                    SceneManager.LoadScene("Mission 3 - water");
-                    break;
-                case 3:
-                    SceneManager.LoadScene("Mission 4 - desert");
-                    break;
-            }
+            // Store selected mission and show player count menu
+            selectedMissionIndex = menuIndexCount;
+            menuText2.SetActive(false);
+            menuText3.SetActive(true);
+            sceneCount++;
+            InitializeMenu(arrayText3);
+        }
+        else if (sceneCount == 3)
+        {
+            // Load scene with selected player count
+            int playerCount = menuIndexCount + 1; // 0-3 becomes 1-4
+            LoadMissionWithPlayerCount(selectedMissionIndex, playerCount);
+        }
+    }
+
+    void LoadMissionWithPlayerCount(int missionIndex, int playerCount)
+    {
+        // Store player count in a way that can be accessed by the loaded scene
+        // You may want to use PlayerPrefs, a static class, or another method
+        PlayerPrefs.SetInt("PlayerCount", playerCount);
+        PlayerPrefs.Save();
+
+        string sceneName = "";
+        switch (missionIndex)
+        {
+            case 0:
+                sceneName = "Mission 1 - space";
+                break;
+            case 1:
+                sceneName = "Mission 2 - snow";
+                break;
+            case 2:
+                sceneName = "Mission 3 - water";
+                break;
+            case 3:
+                sceneName = "Mission 4 - desert";
+                break;
+        }
+
+        if (!string.IsNullOrEmpty(sceneName))
+        {
+            Debug.Log($"Loading {sceneName} with {playerCount} player(s)");
+            SceneManager.LoadScene(sceneName);
         }
     }
 
@@ -202,6 +244,7 @@ public class CenterCameraHandler : MonoBehaviour
     {
         if (menuText1 != null) arrayText1 = GetChildren(menuText1);
         if (menuText2 != null) arrayText2 = GetChildren(menuText2);
+        if (menuText3 != null) arrayText3 = GetChildren(menuText3);
 
         changeCamera = this.GetComponent<ChangeCamera>();
         InitializeMenu(arrayText1);
@@ -260,6 +303,18 @@ public class CenterCameraHandler : MonoBehaviour
                 }
                 break;
             case 3:
+                if (!string.IsNullOrEmpty(ArduinoDataManager.Instance.JoystickDirection) && !isHandlingButtonPress)
+                {
+                    StartCoroutine(HandleMenuNavigation(arrayText3));
+                }
+                else if (ArduinoDataManager.Instance.ButtonBPressed)
+                {
+                    GoBack();
+                }
+                else if (ArduinoDataManager.Instance.ButtonAPressed)
+                {
+                    MoveToIndexCount();
+                }
                 break;
             default:
                 if (ArduinoDataManager.Instance.ButtonAPressed)

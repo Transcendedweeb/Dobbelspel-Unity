@@ -30,10 +30,10 @@ public class WindupDashAttack : MonoBehaviour
 
     Animator animator;
     BossAI bossAI;
+    PlayerReferenceProvider playerRefProvider;
     LockOn lockOn;
     Vector3 recordedTargetPosition;
     GameObject mainParent;
-    GameObject player;
     bool isDashing = false;
 
     void OnEnable()
@@ -42,9 +42,8 @@ public class WindupDashAttack : MonoBehaviour
 
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
+        playerRefProvider = mainParent.GetComponent<PlayerReferenceProvider>();
         lockOn = mainParent.GetComponentInChildren<LockOn>();
-
-        player = bossAI.player;
 
         if (quickReset && bossAI != null)
         {
@@ -66,10 +65,8 @@ public class WindupDashAttack : MonoBehaviour
             yield return null;
         }
 
-        if (player != null)
-            recordedTargetPosition = player.transform.position;
-        else
-            recordedTargetPosition = transform.position;
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        recordedTargetPosition = playerPos;
 
         if (useFixedY)
             recordedTargetPosition.y = fixedYPosition;

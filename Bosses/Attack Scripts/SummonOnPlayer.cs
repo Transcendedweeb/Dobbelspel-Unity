@@ -25,7 +25,7 @@ public class SummonOnPlayer : MonoBehaviour
     BossAI bossAI;
     Animator animator;
     GameObject boss;
-    GameObject player;
+    PlayerReferenceProvider playerRefProvider;
 
     void OnEnable()
     {
@@ -33,8 +33,7 @@ public class SummonOnPlayer : MonoBehaviour
 
         bossAI = boss.GetComponent<BossAI>();
         animator = boss.GetComponent<Animator>();
-
-        player = bossAI.player;
+        playerRefProvider = boss.GetComponent<PlayerReferenceProvider>();
 
         if (quickReset)
             bossAI.InvokeReset();
@@ -54,10 +53,11 @@ public class SummonOnPlayer : MonoBehaviour
 
         for (int i = 0; i < projectileCount; i++)
         {
+            Vector3 playerPos = playerRefProvider.GetPlayerPosition();
             Vector3 spawnPosition = new Vector3(
-                player.transform.position.x,
+                playerPos.x,
                 fixedYPosition,
-                player.transform.position.z
+                playerPos.z
             );
 
             Instantiate(prefab, spawnPosition, Quaternion.identity);

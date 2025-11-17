@@ -36,12 +36,11 @@ public class JumpAttack : MonoBehaviour
     bool changeMarker = false;
     Animator animator;
     BossAI bossAI;
+    PlayerReferenceProvider playerRefProvider;
     float groundY;
     GameObject createdEffect;
     Vector3 lastKnownPosition;
     GameObject mainParent;
-    GameObject player;
-    GameObject playerMarker;
 
 
     void OnEnable()
@@ -50,14 +49,14 @@ public class JumpAttack : MonoBehaviour
 
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
+        playerRefProvider = mainParent.GetComponent<PlayerReferenceProvider>();
         groundY = mainParent.transform.position.y;
-
-        player = bossAI.player;
-        playerMarker = bossAI.playerMarker;
 
         if (quickReset) bossAI.InvokeReset();
 
-        playerMarker.SetActive(false);
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+            playerMarker.SetActive(false);
 
         if (animTriggerJump != "")
             animator.SetTrigger(animTriggerJump);
@@ -74,15 +73,19 @@ public class JumpAttack : MonoBehaviour
             yield return null;
         }
 
-        playerMarker.SetActive(true);
-        playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
-        playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+        {
+            playerMarker.SetActive(true);
+            playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
+            playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+        }
 
         if (prefabEffect != null) CreateEffect();
 
         if (useLastKnownPosition)
         {
-            lastKnownPosition = player.transform.position + lastPositionOffset;
+            lastKnownPosition = playerRefProvider.GetPlayerPosition() + lastPositionOffset;
         }
 
         while (true)
@@ -92,7 +95,7 @@ public class JumpAttack : MonoBehaviour
             if (useLastKnownPosition)
                 targetPosition = lastKnownPosition;
             else
-                targetPosition = player.transform.position;
+                targetPosition = playerRefProvider.GetPlayerPosition();
 
             Vector3 direction = (targetPosition - mainParent.transform.position).normalized;
             mainParent.transform.position += direction * dashSpeed * Time.deltaTime;
@@ -102,8 +105,11 @@ public class JumpAttack : MonoBehaviour
             if (!changeMarker && distanceToTarget <= markerDistance)
             {
                 changeMarker = true;
-                playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
-                playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+                if (playerMarker != null)
+                {
+                    playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
+                    playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+                }
             }
 
             if (distanceToTarget <= attackDistance)
@@ -124,7 +130,8 @@ public class JumpAttack : MonoBehaviour
     void CreateEffect()
     {
         Vector3 spawnPosition = mainParent.transform.position + positionOffsetEffect;
-        Vector3 directionToPlayer = (player.transform.position - spawnPosition).normalized;
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        Vector3 directionToPlayer = (playerPos - spawnPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
         createdEffect = Instantiate(prefabEffect, spawnPosition, lookRotation, mainParent.transform);
     }
@@ -139,10 +146,13 @@ public class JumpAttack : MonoBehaviour
         Vector3 groundPosition = new Vector3(mainParent.transform.position.x, groundY, mainParent.transform.position.z);
         mainParent.transform.position = groundPosition;
 
-        playerMarker.SetActive(false);
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+            playerMarker.SetActive(false);
 
         Vector3 spawnPosition = gameObject.transform.position + positionOffsetAttack;
-        Vector3 directionToPlayer = (player.transform.position - spawnPosition).normalized;
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        Vector3 directionToPlayer = (playerPos - spawnPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer) * Quaternion.Euler(positionOffsetRotationAttack);
 
         Instantiate(prefabAttack, spawnPosition, lookRotation);

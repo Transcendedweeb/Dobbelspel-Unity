@@ -71,7 +71,11 @@ public class PlayerMovementParticles : MonoBehaviour
 
         foreach (GameObject particle in activeParticles)
         {
-            particle.SetActive(false);
+            // Null check to prevent MissingReferenceException if particle was destroyed
+            if (particle != null)
+            {
+                particle.SetActive(false);
+            }
         }
     }
 
@@ -80,8 +84,12 @@ public class PlayerMovementParticles : MonoBehaviour
         if (disableActive) DisableActiveParticles();
         foreach (GameObject particle in particlesToEnable)
         {
-            particle.SetActive(true);
-            activeParticles.Add(particle);
+            // Null check to prevent MissingReferenceException if particle was destroyed
+            if (particle != null)
+            {
+                particle.SetActive(true);
+                activeParticles.Add(particle);
+            }
         }
     }
 }

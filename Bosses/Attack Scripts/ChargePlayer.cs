@@ -23,9 +23,9 @@ public class ChargePlayer : MonoBehaviour
 
     Animator animator;
     BossAI bossAI;
+    PlayerReferenceProvider playerRefProvider;
     GameObject instantiatedPrefab;
     GameObject mainParent;
-    GameObject player;
 
     void OnEnable()
     {
@@ -33,8 +33,7 @@ public class ChargePlayer : MonoBehaviour
 
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
-
-        player = bossAI.player;
+        playerRefProvider = mainParent.GetComponent<PlayerReferenceProvider>();
 
         if (animBoolName != "")
             animator.SetBool(animBoolName, true);
@@ -54,11 +53,12 @@ public class ChargePlayer : MonoBehaviour
 
         while (elapsedTime < durationInSeconds)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+            Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+            float distanceToPlayer = Vector3.Distance(transform.position, playerPos);
 
             if (distanceToPlayer > minDistance)
             {
-                Vector3 direction = (player.transform.position - transform.position).normalized;
+                Vector3 direction = (playerPos - transform.position).normalized;
                 mainParent.transform.position += movementSpeed * Time.deltaTime * direction;
             }
 
@@ -75,7 +75,8 @@ public class ChargePlayer : MonoBehaviour
     void InvokePrefab()
     {
         Vector3 spawnPosition = gameObject.transform.position + prefabPositionOffset;
-        Vector3 directionToPlayer = (player.transform.position - spawnPosition).normalized;
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        Vector3 directionToPlayer = (playerPos - spawnPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
         Quaternion spawnRotation = lookRotation * Quaternion.Euler(prefabRotationOffset);
 

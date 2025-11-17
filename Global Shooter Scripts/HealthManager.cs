@@ -50,8 +50,35 @@ public class HealthManager : MonoBehaviour
     {
         if (health > 0) return;
 
-        // endScreen.SetActive(true);
-        player.GetComponent<PcMovement>().DisableLeanPosition();
+        // Determine if this HealthManager is on a player or boss
+        bool isPlayer = IsPlayerHealthManager();
+        
+        if (isPlayer)
+        {
+            HandlePlayerDeath();
+        }
+        else
+        {
+            HandleBossDeath();
+        }
+    }
+    
+    bool IsPlayerHealthManager()
+    {
+        // Check if this HealthManager is attached to a player
+        // A player will have PcMovement component
+        return GetComponent<PcMovement>() != null;
+    }
+    
+    void HandlePlayerDeath()
+    {
+        GameObject deadPlayer = gameObject;
+        
+        // Play death animation and effects
+        if (player != null && player.GetComponent<PcMovement>() != null)
+        {
+            player.GetComponent<PcMovement>().DisableLeanPosition();
+        }
         
         if (animationModel != null) animationModel.GetComponent<Animator>().SetBool("Destroyed", true);
         if (destructionEffect != null) destructionEffect.SetActive(true);
@@ -59,12 +86,42 @@ public class HealthManager : MonoBehaviour
         if (setBlinking) PlaySfx.StopSFX(audioSource, blinkingSound);
 
         StopPlayer();
+        
+        // Notify PlayerManager about player death
+        PlayerManager playerManager = FindObjectOfType<PlayerManager>();
+        if (playerManager != null)
+        {
+            playerManager.OnPlayerDeath(deadPlayer);
+        }
+    }
+    
+    void HandleBossDeath()
+    {
+        // endScreen.SetActive(true);
+        if (animationModel != null) animationModel.GetComponent<Animator>().SetBool("Destroyed", true);
+        if (destructionEffect != null) destructionEffect.SetActive(true);
+        if (changeMaterial) ChangeMaterial();
+        if (setBlinking) PlaySfx.StopSFX(audioSource, blinkingSound);
+        
         StopBoss();
+        StopAllPlayers();
+    }
+    
+    void StopAllPlayers()
+    {
+        // Find and stop all players in the game
+        PcMovement[] allPlayers = FindObjectsOfType<PcMovement>();
+        
+        foreach (PcMovement playerMovement in allPlayers)
+        {
+            StopPlayer(playerMovement.gameObject);
+        }
     }
 
-    void UpdateHealthBar()
+    public void UpdateHealthBar()
     {
-        healthBar.fillAmount = health / maxHealth;
+        if (healthBar != null)
+            healthBar.fillAmount = health / maxHealth;
     }
 
     void ChangeMaterial()
@@ -82,20 +139,35 @@ public class HealthManager : MonoBehaviour
         PlaySfx.PlaySFX(blinkingSound, audioSource, loop: true);
     }
 
-    void StopPlayer()
+    void StopPlayer(GameObject playerObj = null)
     {
-        player.GetComponent<BoxCollider>().enabled = false;
-        player.GetComponent<CharacterController>().enabled = false;
-        player.GetComponent<PcMovement>().enabled = false;
-        player.GetComponent<PcShoot>().enabled = false;
-        player.GetComponent<DodgeRoll>().enabled = false;
-        player.GetComponent<HealthManager>().enabled = false;
-        player.GetComponent<PlayerMovementParticles>().DisableActiveParticles();
-        player.GetComponent<PlayerMovementParticles>().enabled = false;
+        if (playerObj == null)
+            playerObj = player != null ? player : gameObject;
+        
+        if (playerObj.GetComponent<BoxCollider>() != null)
+            playerObj.GetComponent<BoxCollider>().enabled = false;
+        if (playerObj.GetComponent<CharacterController>() != null)
+            playerObj.GetComponent<CharacterController>().enabled = false;
+        if (playerObj.GetComponent<PcMovement>() != null)
+            playerObj.GetComponent<PcMovement>().enabled = false;
+        if (playerObj.GetComponent<PcShoot>() != null)
+            playerObj.GetComponent<PcShoot>().enabled = false;
+        if (playerObj.GetComponent<DodgeRoll>() != null)
+            playerObj.GetComponent<DodgeRoll>().enabled = false;
+        if (playerObj.GetComponent<HealthManager>() != null)
+            playerObj.GetComponent<HealthManager>().enabled = false;
+        if (playerObj.GetComponent<PlayerMovementParticles>() != null)
+        {
+            playerObj.GetComponent<PlayerMovementParticles>().DisableActiveParticles();
+            playerObj.GetComponent<PlayerMovementParticles>().enabled = false;
+        }
     }
 
     void StopBoss()
     {
-        boss.GetComponent<BossAI>().enabled = false;
+        GameObject bossObj = boss != null ? boss : gameObject;
+        
+        if (bossObj.GetComponent<BossAI>() != null)
+            bossObj.GetComponent<BossAI>().enabled = false;
     }
 }

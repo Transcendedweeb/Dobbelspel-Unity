@@ -23,8 +23,8 @@ public class ShootAtPlayer : MonoBehaviour
     public bool quickReset = false;
 
     ChangeEffectColor changeEffectColor;
-    GameObject playerMarker;
     BossAI bossAI;
+    PlayerReferenceProvider playerRefProvider;
 
     void Start()
     {
@@ -35,16 +35,23 @@ public class ShootAtPlayer : MonoBehaviour
     void OnEnable()
     {
         bossAI = transform.root.gameObject.GetComponent<BossAI>();
-        playerMarker = bossAI.playerMarker;
+        playerRefProvider = transform.root.gameObject.GetComponent<PlayerReferenceProvider>();
 
-        changeEffectColor = playerMarker.GetComponent<ChangeEffectColor>();
-        changeEffectColor.effectColor = Color.white;
-        changeEffectColor.ApplyColorToChildren();
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+        {
+            changeEffectColor = playerMarker.GetComponent<ChangeEffectColor>();
+            if (changeEffectColor != null)
+            {
+                changeEffectColor.effectColor = Color.white;
+                changeEffectColor.ApplyColorToChildren();
+            }
+            playerMarker.SetActive(true);
+        }
 
         if (quickReset)
             bossAI.InvokeReset();
 
-        playerMarker.SetActive(true);
         StartCoroutine(Main());
     }
 
@@ -55,15 +62,19 @@ public class ShootAtPlayer : MonoBehaviour
 
         yield return new WaitForSeconds(waitTime);
 
-        changeEffectColor.effectColor = Color.red;
-        changeEffectColor.ApplyColorToChildren();
+        if (changeEffectColor != null)
+        {
+            changeEffectColor.effectColor = Color.red;
+            changeEffectColor.ApplyColorToChildren();
+        }
 
         yield return new WaitForSeconds(reactionTime);
 
         for (int i = 0; i < projectileCount; i++)
         {
             Vector3 spawnPosition = muzzle.transform.position;
-            Quaternion spawnRotation = Quaternion.LookRotation(playerMarker.transform.position - muzzle.transform.position);
+            Vector3 markerPos = playerRefProvider.GetPlayerMarkerPosition();
+            Quaternion spawnRotation = Quaternion.LookRotation(markerPos - muzzle.transform.position);
             Instantiate(prefab, spawnPosition, spawnRotation);
             yield return new WaitForSeconds(shotTime);
         }
@@ -79,7 +90,10 @@ public class ShootAtPlayer : MonoBehaviour
         if (!quickReset)
             bossAI.InvokeReset();
 
-        playerMarker.SetActive(false);
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+            playerMarker.SetActive(false);
+        
         this.gameObject.SetActive(false);
     }
 }

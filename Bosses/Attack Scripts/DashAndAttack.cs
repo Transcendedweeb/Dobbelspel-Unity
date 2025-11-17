@@ -28,9 +28,8 @@ public class DashAndAttack : MonoBehaviour
     bool changeMarker = false;
     Animator animator;
     BossAI bossAI;
+    PlayerReferenceProvider playerRefProvider;
     GameObject mainParent;
-    GameObject player;
-    GameObject playerMarker;
 
 
     void OnEnable()
@@ -39,33 +38,43 @@ public class DashAndAttack : MonoBehaviour
 
         animator = mainParent.GetComponent<Animator>();
         bossAI = mainParent.GetComponent<BossAI>();
-
-        player = bossAI.player;
-        playerMarker = bossAI.playerMarker;
+        playerRefProvider = mainParent.GetComponent<PlayerReferenceProvider>();
 
         if (quickReset) bossAI.InvokeReset();
-        playerMarker.SetActive(true);
+        
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+            playerMarker.SetActive(true);
+        
         animator.SetTrigger("Dash");
         StartCoroutine(Dash());
     }
 
     IEnumerator Dash()
     {
-        playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
-        playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+        {
+            playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
+            playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+        }
 
         while (true)
         {
-            Vector3 direction = (player.transform.position - transform.position).normalized;
+            Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+            Vector3 direction = (playerPos - transform.position).normalized;
             mainParent.transform.position += direction * dashSpeed * Time.deltaTime;
 
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, playerPos);
 
             if (!changeMarker && distanceToPlayer <= markerDistance)
             {
                 changeMarker = true;
-                playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
-                playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+                if (playerMarker != null)
+                {
+                    playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
+                    playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
+                }
             }
 
             if (distanceToPlayer <= attackDistance) break;
@@ -88,10 +97,13 @@ public class DashAndAttack : MonoBehaviour
 
     void Attack()
     {
-        playerMarker.SetActive(false);
+        GameObject playerMarker = playerRefProvider.GetPlayerMarker();
+        if (playerMarker != null)
+            playerMarker.SetActive(false);
 
         Vector3 spawnPosition = gameObject.transform.position + positionOffset;
-        Vector3 directionToPlayer = (player.transform.position - spawnPosition).normalized;
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        Vector3 directionToPlayer = (playerPos - spawnPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer) * Quaternion.Euler(rotationOffset);
 
         Instantiate(prefab, spawnPosition, lookRotation);

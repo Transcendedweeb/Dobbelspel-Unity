@@ -40,7 +40,8 @@ public class HealthManager : MonoBehaviour
 
     public void AdjustHealth(int value)
     {
-        health -= value;
+        if (health > 0) health -= value;
+        if (health < 0) health = 0;
         CheckForBlinking();
         UpdateHealthBar();
         CheckForDeath();

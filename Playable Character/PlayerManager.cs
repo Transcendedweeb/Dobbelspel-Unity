@@ -8,17 +8,17 @@ public class PlayerManager : MonoBehaviour
 {
     [Header("Player Settings")]
     public GameObject originalPlayer; // The first player in the scene
-    public GameObject deadBodyPrefab; // Prefab to replace dead player
-    public GameObject modelPrefab; // Prefab to replace the child model on spawn
+    public GameObject deadBodyPrefab;
+    public GameObject modelPrefab;
     
     [Header("UI Transition Settings")]
-    public GameObject transitionUI; // UI panel to show during transition
-    public TextMeshProUGUI transitionText; // Text showing "Player 2", "Player 3", etc.
-    public float transitionTime = 3f; // Time for transition (editable in inspector)
+    public GameObject transitionUI;
+    public TextMeshProUGUI transitionText;
+    public float transitionTime = 3f;
     
     [Header("Game Over Settings")]
-    public GameObject gameOverScreen; // Screen to show when all players die
-    
+    public GameObject gameOverScreen;
+
     private int totalPlayers = 1;
     private int currentPlayerIndex = 0;
     private int alivePlayers = 0;
@@ -30,14 +30,14 @@ public class PlayerManager : MonoBehaviour
     private bool isTransitioning = false;
     
     // Store original player's component settings
-    private Dictionary<System.Type, Component> originalComponents = new Dictionary<System.Type, Component>();
-    private Dictionary<System.Type, Dictionary<string, object>> originalComponentValues = new Dictionary<System.Type, Dictionary<string, object>>();
+    private readonly Dictionary<System.Type, Component> originalComponents = new Dictionary<System.Type, Component>();
+    private readonly Dictionary<System.Type, Dictionary<string, object>> originalComponentValues = new Dictionary<System.Type, Dictionary<string, object>>();
     
     // Store initial active states of child GameObjects
-    private Dictionary<string, bool> originalChildStates = new Dictionary<string, bool>();
+    private readonly Dictionary<string, bool> originalChildStates = new Dictionary<string, bool>();
     
     // Store original materials from each renderer (before any modifications)
-    private Dictionary<string, Material[]> originalMaterials = new Dictionary<string, Material[]>();
+    private readonly Dictionary<string, Material[]> originalMaterials = new Dictionary<string, Material[]>();
     
     void Awake()
     {
@@ -134,6 +134,23 @@ public class PlayerManager : MonoBehaviour
         if (gameOverScreen != null)
         {
             gameOverScreen.SetActive(false);
+        }
+
+        ScaleBossHp();
+    }
+
+    void ScaleBossHp()
+    {
+        int playerCount = totalPlayers;
+        int extraPlayers = Mathf.Max(0, playerCount - 1);
+
+        float scaleMultiplier = 1f + (extraPlayers * 0.5f);   // 50% per extra speler
+
+        if (boss.TryGetComponent<HealthManager>(out var bossHealth))
+        {
+            bossHealth.maxHealth = bossHealth.health * scaleMultiplier;
+            bossHealth.health = bossHealth.maxHealth; // Set current HP equal to new max
+            bossHealth.UpdateHealthBar();
         }
     }
     

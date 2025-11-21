@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HealthManager))]
+[RequireComponent(typeof(PcShoot))]
 public class DodgeRoll : MonoBehaviour
 {
     [Header("Dodge settings")]
@@ -27,6 +29,11 @@ public class DodgeRoll : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip dodgeSFX;
 
+    [Header("Energy settings")]
+    public bool dodgingCostEnergy = false;
+    public PlayerEnergy playerEnergy;
+    public float energyCost = 10f;
+
     bool trigger;
     bool rolling = false;
     PcMovement pcMovement;
@@ -45,15 +52,28 @@ public class DodgeRoll : MonoBehaviour
         {
             ArduinoDataManager.Instance.ResetButtonStates();
 
-            if (!trigger && !rolling)
+            HandleDodgingLogics();
+        }
+    }
+
+    void HandleDodgingLogics()
+    {
+        if (!trigger && !rolling)
+        {
+            if (dodgingCostEnergy)
             {
-                rolling = true;
-                pcMovement.enabled = false;
-                animator.SetInteger("Lean position", 5);
-                GetComponent<PcShoot>().enabled = false;
-                GetComponent<HealthManager>().enabled = false;
-                Roll();
+                if (!playerEnergy.LowerEnergy(energyCost))
+                {
+                    return;
+                }
             }
+
+            rolling = true;
+            pcMovement.enabled = false;
+            animator.SetInteger("Lean position", 5);
+            GetComponent<PcShoot>().enabled = false;
+            GetComponent<HealthManager>().enabled = false;
+            Roll();
         }
     }
 

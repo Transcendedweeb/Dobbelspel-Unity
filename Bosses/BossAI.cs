@@ -21,7 +21,7 @@ public class SpecialAttack
 {
     public string name;
     public AttackData[] attacks;
-    public float[] hpThresholds;
+    [Tooltip("Voer HP threshold in als percentage (0–100). 75 = 75%.")] public float[] hpThresholds;
     [HideInInspector] public bool[] triggered;
 }
 
@@ -65,9 +65,13 @@ public class BossAI : MonoBehaviour
 
             if (specialAttack != null)
             {
+                float hpPercent = healthManager.health / healthManager.maxHealth;
+
                 for (int i = 0; i < specialAttack.hpThresholds.Length; i++)
                 {
-                    if (!specialAttack.triggered[i] && healthManager.health <= specialAttack.hpThresholds[i])
+                    float thresholdPercent = specialAttack.hpThresholds[i] / 100f;
+
+                    if (!specialAttack.triggered[i] && hpPercent <= thresholdPercent)
                     {
                         specialAttack.triggered[i] = true;
                         StartCoroutine(PerformAttackSequence(specialAttack.attacks));

@@ -98,7 +98,7 @@ public class HealthManager : MonoBehaviour
     
     void HandleBossDeath()
     {
-        // endScreen.SetActive(true);
+        if(this.CompareTag("Boss")) endScreen.SetActive(true);
         if (animationModel != null) animationModel.GetComponent<Animator>().SetBool("Destroyed", true);
         if (destructionEffect != null) destructionEffect.SetActive(true);
         if (changeMaterial) ChangeMaterial();

@@ -6,6 +6,7 @@ public class ProjectileCollision : MonoBehaviour
 {
     public int damage = 100;
     public bool playerProjectile = false;
+    
     void OnCollisionEnter(Collision collision)
     {
         if (!playerProjectile && !collision.gameObject.CompareTag("Player")) return;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SummonOnPlayer : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class SummonOnPlayer : MonoBehaviour
 
     [Header("Timing Settings")]
     public float initialWaitTime = 0f;
+    public float delayAttackAtAnimStart = 0f;
     public float cooldown = 0f;
 
     [Header("Animation Settings")]
@@ -51,10 +53,13 @@ public class SummonOnPlayer : MonoBehaviour
         if (animTriggerName != "")
             animator.SetTrigger(animTriggerName);
 
+        if (delayAttackAtAnimStart > 0f)
+            yield return new WaitForSeconds(delayAttackAtAnimStart);
+
         for (int i = 0; i < projectileCount; i++)
         {
             Vector3 playerPos = playerRefProvider.GetPlayerPosition();
-            Vector3 spawnPosition = new Vector3(
+            Vector3 spawnPosition = new(
                 playerPos.x,
                 fixedYPosition,
                 playerPos.z

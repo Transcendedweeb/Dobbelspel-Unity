@@ -20,7 +20,6 @@ public class SingleHit : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.LogWarning(other);
         if (other.gameObject.CompareTag("Player") && !hasDamaged && canDamage) 
         {
             HealthManager healthManager = other.gameObject.GetComponent<HealthManager>();

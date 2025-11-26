@@ -4,20 +4,38 @@ using UnityEngine;
 
 public class ChangeEffectColor : MonoBehaviour
 {
-    [Header("Set Effect Color")]
+    [Header("Color Settings")]
+    public Color initialColor = Color.white;
     public Color effectColor = Color.white;
+    public bool changeBaseMap = false;
+
+    [Header("Set possible delay")]
+    public float delay = 0f;
 
     void Start()
     {
-        ApplyColorToChildren();
+        // Apply initial color instantly when spawned
+        ApplyColorToChildren(initialColor);
+
+        // If delay is set, change to final color later
+        if (delay > 0f)
+            StartCoroutine(DelayedColorChange());
+        else
+            ApplyColorToChildren(effectColor);
     }
 
     void OnValidate()
     {
-        ApplyColorToChildren();
+        ApplyColorToChildren(effectColor);
     }
 
-    public void ApplyColorToChildren()
+    IEnumerator DelayedColorChange()
+    {
+        yield return new WaitForSeconds(delay);
+        ApplyColorToChildren(effectColor);
+    }
+
+    public void ApplyColorToChildren(Color color)
     {
         Renderer[] childRenderers = GetComponentsInChildren<Renderer>(true);
 
@@ -30,13 +48,20 @@ public class ChangeEffectColor : MonoBehaviour
                 if (materials[i] != null)
                 {
                     if (materials[i].HasProperty("_Color"))
-                        materials[i].SetColor("_Color", effectColor);
+                        materials[i].SetColor("_Color", color);
                     if (materials[i].HasProperty("_TintColor"))
-                        materials[i].SetColor("_TintColor", effectColor);
+                        materials[i].SetColor("_TintColor", color);
                     if (materials[i].HasProperty("_RimColor"))
-                        materials[i].SetColor("_RimColor", effectColor);
+                        materials[i].SetColor("_RimColor", color);
+                    if (changeBaseMap && materials[i].HasProperty("_BaseMap"))
+                        materials[i].SetColor("_BaseColor", color);
                 }
             }
         }
+    }
+
+    public void ApplyColorToChildren()
+    {
+        ApplyColorToChildren(effectColor);
     }
 }

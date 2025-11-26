@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class DestroySelf : MonoBehaviour
 {
-    public float timeInSeconds = 0f;
     public bool destroyOnEnable = false;
+    public bool destroyOnStart = false;
+    public float timeInSeconds = 0f;
 
     void OnEnable()
     {
-        if (destroyOnEnable) Invoke("DestroySelfFunc", timeInSeconds);
+        if (destroyOnEnable) Invoke(nameof(DestroySelfFunc), timeInSeconds);
+    }
+    
+    void Start()
+    {
+        if (destroyOnStart) Invoke(nameof(DestroySelfFunc), timeInSeconds);
     }
 
     public void DestroySelfFunc()

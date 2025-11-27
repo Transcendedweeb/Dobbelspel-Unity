@@ -144,7 +144,7 @@ public class PlayerManager : MonoBehaviour
         int playerCount = totalPlayers;
         int extraPlayers = Mathf.Max(0, playerCount - 1);
 
-        float scaleMultiplier = 1f + (extraPlayers * 0.5f);   // 50% per extra speler
+        float scaleMultiplier = 1f + (extraPlayers * 0.4f);   // 50% per extra speler
 
         if (boss.TryGetComponent<HealthManager>(out var bossHealth))
         {

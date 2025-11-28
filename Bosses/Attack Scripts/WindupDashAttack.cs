@@ -1,166 +1,185 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WindupDashAttack : MonoBehaviour
 {
-    [Header("Object References")]
-    public GameObject prefab;
+    [Header("Prefabs (Optional)")]
+    public GameObject windupPrefab;
+    public bool windupAsChild = false;
+    public Vector3 windupOffset = Vector3.zero;
 
-    [Header("Windup (Start)")]
-    public string windupAnimTrigger = "Windup";
-    public float windupTime = 1.0f;
+    public GameObject dashPrefab;
+    public bool dashAsChild = false;
+    public Vector3 dashOffset = Vector3.zero;
 
-    [Header("Dash (Attack)")]
-    public string attackAnimTrigger = "Attack";
-    public float dashSpeed = 6f;
-    public float attackDistance = 1.0f;
+    public GameObject endPrefab;
+    public bool endAsChild = false;
+    public Vector3 endOffset = Vector3.zero;
+
+    [Header("Windup")]
+    public float windupTime = 1f;
+
+    [Header("Dash")]
+    public float dashSpeed = 7f;
+    public float stopDistance = 0.2f;
     public Vector3 dashPositionOffset = Vector3.zero;
-    public Vector3 spawnOffset = Vector3.zero;
 
-    [Header("Position / Rotation Options")]
-    public Vector3 rotationOffset = Vector3.zero;
+    [Header("Height Options")]
     public bool useFixedY = false;
     public float fixedYPosition = 0f;
 
+    [Header("Animation")]
+    public string animationName = "State";
+
     [Header("Behaviour")]
     public bool quickReset = false;
-    public float animWaitTimeAfterArrival = 0.1f;
-    public float endWaitTime = 0f;
+    public float afterDashDelay = 0.1f;
+    public float endDelay = 0f;
+    public LockOn lockOn;
+    public float playerMarkerWarningTime = 1f;
+    public bool nextAttackIsWindUp = false;
 
     Animator animator;
     BossAI bossAI;
     PlayerReferenceProvider playerRefProvider;
-    LockOn lockOn;
-    Vector3 recordedTargetPosition;
-    GameObject mainParent;
-    bool isDashing = false;
+    GameObject playerMarker;
+    GameObject rootParent;    
+    Vector3 dashTarget;
+
 
     void OnEnable()
     {
-        mainParent = transform.root.gameObject;
+        rootParent = transform.root.gameObject;
 
-        animator = mainParent.GetComponent<Animator>();
-        bossAI = mainParent.GetComponent<BossAI>();
-        playerRefProvider = mainParent.GetComponent<PlayerReferenceProvider>();
-        lockOn = mainParent.GetComponentInChildren<LockOn>();
+        animator = rootParent.GetComponent<Animator>();
+        bossAI = rootParent.GetComponent<BossAI>();
 
-        if (quickReset && bossAI != null)
-        {
-            bossAI.InvokeReset();
-        }
+        playerRefProvider = rootParent.GetComponent<PlayerReferenceProvider>();
+        playerMarker = playerRefProvider.GetPlayerMarker();
+        playerMarker.SetActive(true);
+        playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.white;
+        playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
 
-        StartCoroutine(WindupThenDash());
+        if (quickReset) bossAI.InvokeReset();
+        Invoke(nameof(SetPlayerMarkerToRed), playerMarkerWarningTime);
+        StartCoroutine(MainRoutine());
     }
 
-    IEnumerator WindupThenDash()
-    {
-        if (animator != null && !string.IsNullOrEmpty(windupAnimTrigger))
-            animator.SetTrigger(windupAnimTrigger);
+    IEnumerator MainRoutine()
+    {   
+        SetAnimState(1);
+        SpawnPrefab(windupPrefab, windupAsChild, windupOffset);
+        yield return new WaitForSeconds(windupTime);
 
-        float t = 0f;
-        while (t < windupTime)
-        {
-            t += Time.deltaTime;
-            yield return null;
-        }
+        RecordTarget();
 
-        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
-        recordedTargetPosition = playerPos;
+        if (playerMarker != null)
+            playerMarker.SetActive(false);
+            
+        lockOn.enabled = false;
+        SetAnimState(2);
+        SpawnPrefab(dashPrefab, dashAsChild, dashOffset);
 
-        if (useFixedY)
-            recordedTargetPosition.y = fixedYPosition;
+        yield return StartCoroutine(Dash());
 
-        recordedTargetPosition += dashPositionOffset;
+        yield return new WaitForSeconds(afterDashDelay);
 
-        if (animator != null && !string.IsNullOrEmpty(attackAnimTrigger))
-            animator.SetTrigger(attackAnimTrigger);
-
-        SetLockOn(false);
-
-        isDashing = true;
-        yield return StartCoroutine(DashToRecordedPosition());
-        isDashing = false;
-
-        SetLockOn(true);
-
-        if (animWaitTimeAfterArrival > 0f)
-            yield return new WaitForSeconds(animWaitTimeAfterArrival);
-
-        DoAttack();
-
-        if (endWaitTime > 0f)
-            yield return new WaitForSeconds(endWaitTime);
+        SpawnPrefab(endPrefab, endAsChild, endOffset);
+        yield return new WaitForSeconds(endDelay);
 
         End();
     }
 
-    IEnumerator DashToRecordedPosition()
+    void RecordTarget()
     {
-        float effectiveSpeed = Mathf.Max(0.001f, dashSpeed);
+        Vector3 playerPos = playerRefProvider.GetPlayerPosition();
+        
+        Vector3 forwardToPlayer = (playerPos - rootParent.transform.position).normalized;
+        
+        forwardToPlayer.y = 0;
+        forwardToPlayer.Normalize();
+
+        Vector3 right = Vector3.Cross(Vector3.up, forwardToPlayer).normalized;
+
+        Vector3 worldOffset = forwardToPlayer * dashPositionOffset.z
+                            + Vector3.up * dashPositionOffset.y
+                            + right * dashPositionOffset.x;
+
+        dashTarget = playerPos + worldOffset;
+
+        if (useFixedY)
+            dashTarget.y = fixedYPosition;
+        else
+            dashTarget.y = rootParent.transform.position.y;
+    }
+
+    IEnumerator Dash()
+    {
+
+        Transform mover = rootParent.transform;
+
+        Vector3 initial = dashTarget - mover.position;
+        if (initial.magnitude < 0.1f)
+        {
+            dashTarget = mover.position + mover.forward * 2f;
+        }
 
         while (true)
         {
-            Vector3 currentPos = mainParent != null ? mainParent.transform.position : transform.position;
-            Vector3 toTarget = recordedTargetPosition - currentPos;
-            float dist = toTarget.magnitude;
+            Vector3 pos = mover.position;
+            Vector3 dir = dashTarget - pos;
 
-            if (dist <= attackDistance)
+            float dist = dir.magnitude;
+
+            if (dist <= stopDistance)
                 break;
 
-            Vector3 dir = toTarget.normalized;
-            if (mainParent != null)
-                mainParent.transform.position += dir * effectiveSpeed * Time.deltaTime;
-            else
-                transform.position += dir * effectiveSpeed * Time.deltaTime;
+            mover.position += dashSpeed * Time.deltaTime * dir.normalized;
 
             yield return null;
         }
     }
 
-    void DoAttack()
+    void SpawnPrefab(GameObject prefab, bool asChild, Vector3 offset)
     {
-        if (prefab == null) return;
+        if (prefab == null)
+            return;
 
-        Vector3 spawnPos = (mainParent != null ? mainParent.transform.position : transform.position) + spawnOffset;
+        Vector3 pos = rootParent.transform.position + offset;
+        Quaternion rot = Quaternion.LookRotation(dashTarget - pos);
 
-        Quaternion lookRotation = Quaternion.identity;
-        Vector3 dir = (recordedTargetPosition - spawnPos);
-        if (dir.sqrMagnitude > 0.001f)
-            lookRotation = Quaternion.LookRotation(dir.normalized);
-
-        lookRotation *= Quaternion.Euler(rotationOffset);
-
-        Instantiate(prefab, spawnPos, lookRotation);
+        GameObject spawned = Instantiate(prefab, pos, rot);
+        if (asChild)
+            spawned.transform.SetParent(rootParent.transform);
     }
 
-    void SetLockOn(bool set)
+    void SetAnimState(int value)
     {
-        if (lockOn == null)
+        if (animator == null || string.IsNullOrEmpty(animationName))
         {
-            lockOn = mainParent != null
-                ? mainParent.GetComponentInChildren<LockOn>()
-                : GetComponentInChildren<LockOn>();
+            return;
         }
 
-        if (lockOn != null)
-        {
-            lockOn.enabled = set;
-        }
-        else
-        {
-            Debug.LogWarning("[WindupDashAttack] No LockOn component found!");
-        }
+        animator.SetInteger(animationName, value);
+    }
+
+    void SetPlayerMarkerToRed()
+    {
+        playerMarker.GetComponent<ChangeEffectColor>().effectColor = Color.red;
+        playerMarker.GetComponent<ChangeEffectColor>().ApplyColorToChildren();
     }
 
     void End()
     {
-        if (!quickReset && bossAI != null)
-            bossAI.InvokeReset();
+        if (!quickReset) bossAI.InvokeReset();
+        lockOn.enabled = true;
 
-        isDashing = false;
-        this.gameObject.SetActive(false);
+        if (!nextAttackIsWindUp) SetAnimState(0);
+        else SetAnimState(1);
+
+        gameObject.SetActive(false);
     }
+
 
     public void CancelAndEnd()
     {

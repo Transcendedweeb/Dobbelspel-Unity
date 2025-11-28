@@ -1,55 +1,51 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ConstantHitCheck : MonoBehaviour
 {
-    public int damage;
-    public float checkTimeInSec = 1f;
-    private HashSet<HealthManager> playersInside = new HashSet<HealthManager>();
+    public int damage = 1;
+    public float damageInterval = 1f;
+    public float disableTimer = 0f;
+    bool isDisabled = false;
 
-    void OnTriggerEnter(Collider other)
+    private readonly Dictionary<HealthManager, float> nextDamageTime = new();
+
+    void Start()
     {
-        if (other.gameObject.tag == "Player")
+        if (disableTimer > 0) Invoke(nameof(DisableReader), disableTimer);
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (!other.CompareTag("Player") || isDisabled) return;
+
+        HealthManager health = other.GetComponent<HealthManager>();
+        if (health == null || !health.enabled) return;
+
+        float now = Time.time;
+
+        if (!nextDamageTime.TryGetValue(health, out float nextTime))
+            nextTime = 0f;
+
+        if (now >= nextTime)
         {
-            HealthManager healthManager = other.gameObject.GetComponent<HealthManager>();
-            if (!playersInside.Contains(healthManager))
-            {
-                playersInside.Add(healthManager);
-            }
+            health.AdjustHealth(damage);
+            nextDamageTime[health] = now + damageInterval;
         }
+    }
+
+    void DisableReader()
+    {
+        isDisabled = true;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (!other.CompareTag("Player")) return;
+
+        if (other.TryGetComponent<HealthManager>(out var health))
         {
-            HealthManager healthManager = other.gameObject.GetComponent<HealthManager>();
-            if (playersInside.Contains(healthManager))
-            {
-                playersInside.Remove(healthManager);
-            }
-        }
-    }
-
-    void Start()
-    {
-        StartCoroutine(CheckForPlayersInside());
-    }
-
-    IEnumerator CheckForPlayersInside()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(checkTimeInSec);
-
-            foreach (HealthManager healthManager in playersInside)
-            {
-                if (healthManager != null)
-                {
-                    if (healthManager.enabled) healthManager.AdjustHealth(damage);
-                }
-            }
+            nextDamageTime.Remove(health);
         }
     }
 }

@@ -21,7 +21,9 @@ public class SpecialAttack
 {
     public string name;
     public AttackData[] attacks;
-    [Tooltip("Voer HP threshold in als percentage (0–100). 75 = 75%.")] public float[] hpThresholds;
+    [Tooltip("HP threshold as percentage (0–100). 75 = 75%.")] 
+    public float[] hpThresholds;
+
     [HideInInspector] public bool[] triggered;
 }
 
@@ -47,6 +49,9 @@ public class BossAI : MonoBehaviour
     private bool sequenceStarting = false;
     private AttackData currentAttack;
 
+    // 🔥 NEW FLAG – prevents normal attacks during specials
+    private bool isPerformingSpecial = false;
+
     void Start()
     {
         healthManager = GetComponent<HealthManager>();
@@ -54,15 +59,21 @@ public class BossAI : MonoBehaviour
         {
             specialAttack.triggered = new bool[specialAttack.hpThresholds.Length];
         }
+
         Invoke(nameof(InvokeReset), startWaitTime);
     }
 
     void Update()
     {
+        // ⛔ If performing special attack, pause all other attack logic
+        if (isPerformingSpecial) 
+            return;
+
         if (!attacking && !sequenceStarting)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
+            // --- SPECIAL ATTACK CHECK ---
             if (specialAttack != null)
             {
                 float hpPercent = healthManager.health / healthManager.maxHealth;
@@ -74,12 +85,17 @@ public class BossAI : MonoBehaviour
                     if (!specialAttack.triggered[i] && hpPercent <= thresholdPercent)
                     {
                         specialAttack.triggered[i] = true;
+
+                        // ✔ Tell AI we are doing a special attack
+                        isPerformingSpecial = true;
+
                         StartCoroutine(PerformAttackSequence(specialAttack.attacks));
                         return;
                     }
                 }
             }
 
+            // --- NORMAL ATTACK LOGIC ---
             if (distanceToPlayer <= closeDistance && melee != null)
             {
                 melee.SetActive(true);
@@ -124,11 +140,18 @@ public class BossAI : MonoBehaviour
             attacking = true;
 
             yield return new WaitUntil(() => !attacking);
-
             yield return new WaitForSeconds(attack.cooldownAfter);
         }
 
-        InvokeReset();
+        foreach (AttackData attack in sequence)
+            attack.attackObject.SetActive(false);
+
+        currentAttack = null;
+
+        yield return new WaitForSeconds(0.05f);
+
+        isPerformingSpecial = false;
+        attacking = false;
     }
 
     public void InvokeReset()

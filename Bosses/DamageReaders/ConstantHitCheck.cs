@@ -6,12 +6,19 @@ public class ConstantHitCheck : MonoBehaviour
     public int damage = 1;
     public float damageInterval = 1f;
     public float disableTimer = 0f;
+    public float delayStartReader = 0f;
+
     bool isDisabled = false;
 
     private readonly Dictionary<HealthManager, float> nextDamageTime = new();
 
     void Start()
     {
+        if (delayStartReader > 0)
+        {
+            isDisabled = true;
+            Invoke(nameof(EnableReader), delayStartReader);
+        }
         if (disableTimer > 0) Invoke(nameof(DisableReader), disableTimer);
     }
 
@@ -37,6 +44,11 @@ public class ConstantHitCheck : MonoBehaviour
     void DisableReader()
     {
         isDisabled = true;
+    }
+
+    void EnableReader()
+    {
+        isDisabled = false;
     }
 
     void OnTriggerExit(Collider other)

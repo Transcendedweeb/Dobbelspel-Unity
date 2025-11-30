@@ -24,7 +24,6 @@ public class SummonInArea : MonoBehaviour
     [Header("Behavior Options")]
     public bool quickReset = false;
 
-    // Private fields
     BossAI bossAI;
     Animator animator;
     GameObject boss;

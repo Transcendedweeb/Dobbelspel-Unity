@@ -26,7 +26,6 @@ public class MovementPattern : MonoBehaviour
 
     [Header("Prefab Spawn")]
     public GameObject spawnPrefab;
-    public float spawnInterval = 0.5f;
     public Vector3 prefabSpawnOffset;
 
     [Header("Animation")]
@@ -43,14 +42,10 @@ public class MovementPattern : MonoBehaviour
     public float lockOnBlendTime = 0.5f;
     public float lockOnRotationSpeed = 7f;
 
-    // Cached
     private BossAI bossAI;
     private Animator animator;
     private Transform bossRoot;
     private LockOn lockOn;
-
-    private bool running = false;
-
 
     void OnEnable()
     {
@@ -75,10 +70,11 @@ public class MovementPattern : MonoBehaviour
     {
         yield return new WaitForSeconds(startAnimWait);
 
-        running = true;
-
         if (spawnPrefab != null)
-            StartCoroutine(SpawnPrefabRoutine());
+        {
+            Vector3 spawnPos = bossRoot.position + prefabSpawnOffset;
+            Instantiate(spawnPrefab, spawnPos, spawnPrefab.transform.rotation);
+        }
 
         StartCoroutine(RunPattern());
     }
@@ -156,22 +152,8 @@ public class MovementPattern : MonoBehaviour
         EndAttack();
     }
 
-
-    IEnumerator SpawnPrefabRoutine()
-    {
-        while (running)
-        {
-            Vector3 spawnPos = bossRoot.position + prefabSpawnOffset;
-            Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-
-
     void EndAttack()
     {
-        running = false;
-
         if (endAnimTrigger != "")
             animator.SetTrigger(endAnimTrigger);
 

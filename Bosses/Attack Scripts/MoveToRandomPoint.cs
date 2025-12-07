@@ -23,9 +23,6 @@ public class MoveToRandomPoint : MonoBehaviour
     [Header("Behavior")]
     public bool quickReset = false;
 
-    [Header("Reset")]
-    public float autoResetTime = 1f;
-
     // Internal
     private Transform chosenLocation;
     private bool running = false;
@@ -48,9 +45,6 @@ public class MoveToRandomPoint : MonoBehaviour
         }
 
         running = true;
-
-        // fallback auto-reset
-        Invoke(nameof(InvokeReset), autoResetTime);
     }
 
     void Update()
@@ -92,14 +86,9 @@ public class MoveToRandomPoint : MonoBehaviour
         return locations[Random.Range(0, locations.Length)];
     }
 
-    void InvokeReset()
-    {
-        if (!quickReset)   // avoid double-reset
-            bossAI.InvokeReset();
-    }
-
     void End()
     {
+        if (!quickReset) bossAI.InvokeReset();
         running = false;
         gameObject.SetActive(false);
     }

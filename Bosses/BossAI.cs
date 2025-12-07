@@ -47,10 +47,9 @@ public class BossAI : MonoBehaviour
     private int currentAttackIndex = 0;
     private HealthManager healthManager;
     private bool sequenceStarting = false;
-    private AttackData currentAttack;
+    [HideInInspector] public AttackData currentAttack;
 
-    // 🔥 NEW FLAG – prevents normal attacks during specials
-    private bool isPerformingSpecial = false;
+    [HideInInspector] public bool isPerformingSpecial = false;
 
     void Start()
     {
@@ -139,7 +138,14 @@ public class BossAI : MonoBehaviour
             attack.attackObject.SetActive(true);
             attacking = true;
 
-            yield return new WaitUntil(() => !attacking);
+            float t = 0f;
+            while (attacking && t < 5f)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+            // safety reset
+            attacking = false;
             yield return new WaitForSeconds(attack.cooldownAfter);
         }
 

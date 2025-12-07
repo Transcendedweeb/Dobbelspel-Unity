@@ -1,25 +1,70 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PlayerMovementParticles : MonoBehaviour
 {
-    [Header("Movement particles")]
+    [Header("Movement particles (auto-assigned)")]
     public PcMovement playerMovement;
-    public List<GameObject> movementParticlesUp = new();
-    public List<GameObject> movementParticlesBack = new();
-    public List<GameObject> movementParticlesLeft = new();
-    public List<GameObject> movementParticlesRight = new();
+
+    [HideInInspector] public List<GameObject> movementParticlesUp = new();
+    [HideInInspector] public List<GameObject> movementParticlesBack = new();
+    [HideInInspector] public List<GameObject> movementParticlesLeft = new();
+    [HideInInspector] public List<GameObject> movementParticlesRight = new();
 
     [Header("Booster start sound")]
-    public AudioSource boostersSource;    
+    public AudioSource boostersSource;
     public AudioClip startBoostersSFX;
 
-    List<GameObject> activeParticles = new();
-    string lastDir = "";
-    readonly string[] movementGroupUp = new string[] { "Up", "RightUp", "LeftUp" };
-    readonly string[] movementGroupDown = new string[] { "Down", "RightDown", "LeftDown" };
+    private List<GameObject> activeParticles = new();
+    private string lastDir = "";
+
+    private readonly string[] movementGroupUp = new[] { "Up", "RightUp", "LeftUp" };
+    private readonly string[] movementGroupDown = new[] { "Down", "RightDown", "LeftDown" };
+
+
+    void Start()
+    {
+        AutoAssignParticles();
+    }
+
+    /// <summary>
+    /// Finds all MovementParticleTag components under this object
+    /// and assigns them to their respective lists.
+    /// </summary>
+    private void AutoAssignParticles()
+    {
+        var tags = GetComponentsInChildren<MovementParticleTag>(true);
+
+        movementParticlesUp.Clear();
+        movementParticlesBack.Clear();
+        movementParticlesLeft.Clear();
+        movementParticlesRight.Clear();
+        activeParticles.Clear();
+        lastDir = "";
+
+        foreach (var tag in tags)
+        {
+            switch (tag.direction)
+            {
+                case MovementParticleTag.Direction.Up:
+                    movementParticlesUp.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.Down:
+                    movementParticlesBack.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.Left:
+                    movementParticlesLeft.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.Right:
+                    movementParticlesRight.Add(tag.gameObject);
+                    break;
+            }
+        }
+    }
 
 
     void Update()
@@ -62,6 +107,7 @@ public class PlayerMovementParticles : MonoBehaviour
                 DisableActiveParticles();
                 break;
         }
+
         PlaySfx.PlaySFX(startBoostersSFX, boostersSource);
     }
 
@@ -71,20 +117,19 @@ public class PlayerMovementParticles : MonoBehaviour
 
         foreach (GameObject particle in activeParticles)
         {
-            // Null check to prevent MissingReferenceException if particle was destroyed
             if (particle != null)
-            {
                 particle.SetActive(false);
-            }
         }
+
+        activeParticles.Clear();
     }
 
     public void EnableParticleEffect(List<GameObject> particlesToEnable, bool disableActive = true)
     {
         if (disableActive) DisableActiveParticles();
+
         foreach (GameObject particle in particlesToEnable)
         {
-            // Null check to prevent MissingReferenceException if particle was destroyed
             if (particle != null)
             {
                 particle.SetActive(true);

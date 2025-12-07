@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,11 +18,11 @@ public class DodgeRoll : MonoBehaviour
     [HideInInspector] public enum DashState { forward = 1, backwards = 2, left = 3, right = 4, reset = 5 };
 
     [Header("Dodge particles")]
-    public List<GameObject> dashParticlesUp = new();
-    public List<GameObject> dashParticlesDown = new();
-    public List<GameObject> dashParticlesLeft = new();
-    public List<GameObject> dashParticlesRight = new();
-    public PlayerMovementParticles playerMovementParticles;
+    [HideInInspector] public List<GameObject> dashParticlesUp = new();
+    [HideInInspector] public List<GameObject> dashParticlesDown = new();
+    [HideInInspector] public List<GameObject> dashParticlesLeft = new();
+    [HideInInspector] public List<GameObject> dashParticlesRight = new();
+    [HideInInspector] public PlayerMovementParticles playerMovementParticles;
 
     [Header("Dodge sounds")]
     public AudioSource audioSource;
@@ -44,6 +43,43 @@ public class DodgeRoll : MonoBehaviour
         trigger = GetComponent<PcShoot>().triggerRelease;
         pcMovement = GetComponent<PcMovement>();
         characterController = GetComponent<CharacterController>();
+
+        AutoAssignDashParticles();
+    }
+
+    /// <summary>
+    /// Clears all dash particle lists and reassigns them based on MovementParticleTag.
+    /// </summary>
+    private void AutoAssignDashParticles()
+    {
+        dashParticlesUp.Clear();
+        dashParticlesDown.Clear();
+        dashParticlesLeft.Clear();
+        dashParticlesRight.Clear();
+
+        var tags = GetComponentsInChildren<MovementParticleTag>(true);
+
+        foreach (var tag in tags)
+        {
+            switch (tag.direction)
+            {
+                case MovementParticleTag.Direction.BUp:
+                    dashParticlesUp.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.BDown:
+                    dashParticlesDown.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.BLeft:
+                    dashParticlesLeft.Add(tag.gameObject);
+                    break;
+
+                case MovementParticleTag.Direction.BRight:
+                    dashParticlesRight.Add(tag.gameObject);
+                    break;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -51,7 +87,6 @@ public class DodgeRoll : MonoBehaviour
         if (ArduinoDataManager.Instance.ButtonBPressed)
         {
             ArduinoDataManager.Instance.ResetButtonStates();
-
             HandleDodgingLogics();
         }
     }
@@ -60,13 +95,8 @@ public class DodgeRoll : MonoBehaviour
     {
         if (!trigger && !rolling)
         {
-            if (dodgingCostEnergy)
-            {
-                if (!playerEnergy.LowerEnergy(energyCost))
-                {
-                    return;
-                }
-            }
+            if (dodgingCostEnergy && !playerEnergy.LowerEnergy(energyCost))
+                return;
 
             rolling = true;
             pcMovement.enabled = false;
@@ -150,11 +180,6 @@ public class DodgeRoll : MonoBehaviour
 
         FindObjectOfType<PlayerCameraHandler>()?.TriggerDodgeLag();
         FindObjectOfType<PlayerCameraHandler>()?.TriggerCameraShake(1.5f, 1.2f);
-
-        if (rollDirection != Vector3.zero)
-        {
-            StartCoroutine(PerformRoll(rollDirection));
-        }
 
         if (rollDirection != Vector3.zero)
         {

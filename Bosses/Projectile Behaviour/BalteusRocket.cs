@@ -14,6 +14,8 @@ public class BalteusRocket : MonoBehaviour
 
     [Tooltip("Maximum time it is allowed to home")]
     public float homingDuration = 3f;
+    public float stopHomingAngle = 1.5f;
+    public float stopHomingDistance = 7f;
 
     [Tooltip("Degrees per second while homing")]
     public float turnSpeed = 90f;
@@ -63,8 +65,9 @@ public class BalteusRocket : MonoBehaviour
                 Vector3 forwardWithOffset = rotationOffset * Vector3.forward;
 
                 float angle = Vector3.Angle(transform.rotation * forwardWithOffset, dir);
+                float distance = Vector3.Distance(transform.position, targetPos);
 
-                if (angle < 1.5f)
+                if (angle < stopHomingAngle && distance < stopHomingDistance)
                 {
                     homingStopped = true;
                     break;

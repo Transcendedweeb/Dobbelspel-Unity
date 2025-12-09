@@ -33,7 +33,6 @@ public class WindupDashAttack : MonoBehaviour
 
     [Header("Behaviour")]
     public bool quickReset = false;
-    public float afterDashDelay = 0.1f;
     public float endDelay = 0f;
     public LockOn lockOn;
     public float playerMarkerWarningTime = 1f;
@@ -82,7 +81,6 @@ public class WindupDashAttack : MonoBehaviour
 
         yield return StartCoroutine(Dash());
 
-        yield return new WaitForSeconds(afterDashDelay);
 
         SpawnPrefab(endPrefab, endAsChild, endOffset);
         yield return new WaitForSeconds(endDelay);
@@ -138,6 +136,7 @@ public class WindupDashAttack : MonoBehaviour
 
             yield return null;
         }
+        mover.position = dashTarget;
     }
 
     void SpawnPrefab(GameObject prefab, bool asChild, Vector3 offset)
@@ -146,7 +145,7 @@ public class WindupDashAttack : MonoBehaviour
             return;
 
         Vector3 pos = rootParent.transform.position + offset;
-        Quaternion rot = Quaternion.LookRotation(dashTarget - pos);
+        Quaternion rot = prefab.transform.rotation;
 
         GameObject spawned = Instantiate(prefab, pos, rot);
         if (asChild)

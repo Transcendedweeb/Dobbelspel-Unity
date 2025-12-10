@@ -19,7 +19,8 @@ public class RocketForward : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         DisableEffects();
-        explosion?.SetActive(true);
+        if (explosion != null) 
+            explosion.SetActive(true);
         exploded = true;
         Invoke("DestroyParent", 2f);
     }

@@ -113,29 +113,23 @@ public class WindupDashAttack : MonoBehaviour
 
     IEnumerator Dash()
     {
-
         Transform mover = rootParent.transform;
 
-        Vector3 initial = dashTarget - mover.position;
-        if (initial.magnitude < 0.1f)
-        {
+        if ((dashTarget - mover.position).sqrMagnitude < 0.01f)
             dashTarget = mover.position + mover.forward * 2f;
-        }
 
         while (true)
         {
-            Vector3 pos = mover.position;
-            Vector3 dir = dashTarget - pos;
+            float step = dashSpeed * Time.deltaTime;
 
-            float dist = dir.magnitude;
+            mover.position = Vector3.MoveTowards(mover.position, dashTarget, step);
 
-            if (dist <= stopDistance)
+            if (Vector3.Distance(mover.position, dashTarget) <= stopDistance)
                 break;
-
-            mover.position += dashSpeed * Time.deltaTime * dir.normalized;
 
             yield return null;
         }
+
         mover.position = dashTarget;
     }
 
@@ -144,12 +138,18 @@ public class WindupDashAttack : MonoBehaviour
         if (prefab == null)
             return;
 
-        Vector3 pos = rootParent.transform.position + offset;
-        Quaternion rot = prefab.transform.rotation;
+        Transform root = rootParent.transform;
 
-        GameObject spawned = Instantiate(prefab, pos, rot);
+        // Convert local offset into world position
+        Vector3 worldPos = root.TransformPoint(offset);
+
+        // Final rotation = boss rotation + prefab rotation as offset
+        Quaternion finalRot = root.rotation * prefab.transform.rotation;
+
+        GameObject spawned = Instantiate(prefab, worldPos, finalRot);
+
         if (asChild)
-            spawned.transform.SetParent(rootParent.transform);
+            spawned.transform.SetParent(root, true);
     }
 
     void SetAnimState(int value)

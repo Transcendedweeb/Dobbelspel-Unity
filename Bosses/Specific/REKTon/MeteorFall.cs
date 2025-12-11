@@ -119,6 +119,7 @@ public class MeteorFall : MonoBehaviour
 
     void End()
     {
+        bossAI.currentAttack = null;
         bossAI.InvokeReset();
         this.gameObject.SetActive(false);
     }

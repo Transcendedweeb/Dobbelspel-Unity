@@ -7,6 +7,7 @@ public class SummonInArea : MonoBehaviour
     [Header("Object References")]
     public GameObject prefab;
     public Transform center;
+    public bool playerIsCenter = false; 
 
     [Header("Spawn Settings")]
     public int projectileCount = 1;
@@ -68,9 +69,22 @@ public class SummonInArea : MonoBehaviour
 
     Vector3 GetRandomPosition()
     {
-        Vector3 centerPosition = center != null ? center.position : transform.position;
+        Transform centerTransform;
+
+        if (playerIsCenter && bossAI != null && bossAI.player != null)
+        {
+            centerTransform = bossAI.player.transform;
+        }
+        else
+        {
+            centerTransform = center != null ? center : transform;
+        }
+
+        Vector3 centerPos = centerTransform.position;
+
         float randomX = Random.Range(-areaSize.x / 2, areaSize.x / 2);
         float randomZ = Random.Range(-areaSize.y / 2, areaSize.y / 2);
-        return new Vector3(centerPosition.x + randomX, fixedYPosition, centerPosition.z + randomZ);
+
+        return new Vector3(centerPos.x + randomX, fixedYPosition, centerPos.z + randomZ);
     }
 }

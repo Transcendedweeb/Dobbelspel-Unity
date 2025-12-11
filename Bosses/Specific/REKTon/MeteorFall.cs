@@ -35,6 +35,9 @@ public class MeteorFall : MonoBehaviour
         bossAI = mainParent.GetComponent<BossAI>();
         groundY = mainParent.transform.position.y;
 
+        player = bossAI.player;
+        playerMarker = bossAI.playerMarker;
+
         if (animTriggerHold != "")
             animator.SetTrigger(animTriggerHold);
 

@@ -103,32 +103,16 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Muziek, 
             Level.Level2, 
-            "Welke Amerikaanse jazzpianist is bekend om zijn complexe ritmes en componeerde de jazzstandaard Take Five?", 
-            new List<string> { "Duke Ellington", "Bill Evans", "Dave Brubeck", "Herbie Hancock" }, 
+            "Wat is de naam van het Led Zeppelin-album uit 1971 waarop de iconische nummers Stairway to Heaven en Black Dog staan?", 
+            new List<string> { "Led Zeppelin II", "Led Zeppelin III", "Led Zeppelin IV", "Houses of the Holy" }, 
             2
         );
 
         casinoData.AddQuestion(
             Subject.Muziek, 
             Level.Level2, 
-            "Wie componeerde het klassieke stuk Boléro, een langzame maar intense opbouw die slechts één thema herhaalt?", 
-            new List<string> { "Claude Debussy", "Maurice Ravel", "Igor Stravinsky", "Georges Bizet" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Muziek, 
-            Level.Level2, 
-            "Welk nummer van The Beatles wordt vaak genoemd vanwege het gebruik van een sitar en oosterse invloeden, dankzij de interesse van George Harrison in Indiase muziek?", 
-            new List<string> { "Here Comes the Sun", "Norwegian Wood", "While My Guitar Gently Weeps", "Blackbird" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Muziek, 
-            Level.Level2, 
-            "Wat is de naam van het Led Zeppelin-album uit 1971 waarop de iconische nummers Stairway to Heaven en Black Dog staan?", 
-            new List<string> { "Led Zeppelin II", "Led Zeppelin III", "Led Zeppelin IV", "Houses of the Holy" }, 
+            "Wat is de naam van het avant-gardistische stuk van John Cage dat bestaat uit 4 minuten en 33 seconden stilte?", 
+            new List<string> { "Silence", "Emptiness", "4'33", "Stillness" }, 
             2
         );
 
@@ -167,38 +151,38 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Muziek, 
             Level.Level2, 
-            "Wat is de naam van het avant-gardistische stuk van John Cage dat bestaat uit 4 minuten en 33 seconden stilte?", 
-            new List<string> { "Silence", "Empty", "4'33", "Stillness" }, 
+            "Welke album van Pink Floyd uit 1973 wordt beschouwd als een van de best verkochte en meest invloedrijke albums aller tijden?", 
+            new List<string> { "The Wall", "Dark Side of the Moon", "Wish You Were Here", "Animals" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Muziek, 
+            Level.Level2, 
+            "Welke Amerikaanse jazzpianist is bekend om zijn complexe ritmes en componeerde de jazzstandaard Take Five?", 
+            new List<string> { "Duke Ellington", "Bill Evans", "Dave Brubeck", "Herbie Hancock" }, 
             2
         );
 
         casinoData.AddQuestion(
             Subject.Muziek, 
             Level.Level2, 
-            "Welke album van Pink Floyd uit 1973 wordt beschouwd als een van de best verkochte en meest invloedrijke albums aller tijden?", 
-            new List<string> { "The Wall", "Dark Side of the Moon", "Wish You Were Here", "Animals" }, 
+            "Wie componeerde het klassieke stuk Boléro, een langzame maar intense opbouw die slechts één thema herhaalt?", 
+            new List<string> { "Claude Debussy", "Maurice Ravel", "Igor Stravinsky", "Georges Bizet" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Muziek, 
+            Level.Level2, 
+            "Welk nummer van The Beatles wordt vaak genoemd vanwege het gebruik van een sitar en oosterse invloeden, dankzij de interesse van George Harrison in Indiase muziek?", 
+            new List<string> { "Here Comes the Sun", "Norwegian Wood", "While My Guitar Gently Weeps", "Blackbird" }, 
             1
         );
     }
 
     void SetMuziek3()
     {
-        casinoData.AddQuestion(
-            Subject.Muziek, 
-            Level.Level3, 
-            "De Italiaanse componist Luigi Nono schreef de Il canto sospeso uit 1956, gebruikt teksten uit brieven van welke groep mensen?", 
-            new List<string> { "Duitse vluchtelingen", "Oorlogs gevangenen", "Holocaust slachtoffers", "Communistische activisten" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Muziek, 
-            Level.Level3, 
-            "Welke baanbrekende elektronische muziekgroep uit Duitsland inspireerde genres zoals techno en hiphop, en bracht in 1974 het album Autobahn uit?", 
-            new List<string> { "Tangerine Dream", "Can", "Neu!", "Kraftwerk" }, 
-            3
-        );
-
         casinoData.AddQuestion(
             Subject.Muziek, 
             Level.Level3, 
@@ -262,26 +246,26 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Planet Rock", "The Message", "Delight", "White Lines" }, 
             2
         );
+
+        casinoData.AddQuestion(
+            Subject.Muziek, 
+            Level.Level3, 
+            "De Italiaanse componist Luigi Nono schreef de Il canto sospeso uit 1956, gebruikt teksten uit brieven van welke groep mensen?", 
+            new List<string> { "Duitse vluchtelingen", "Oorlogs gevangenen", "Holocaust slachtoffers", "Communistische activisten" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.Muziek, 
+            Level.Level3, 
+            "Welke baanbrekende elektronische muziekgroep uit Duitsland inspireerde genres zoals techno en hiphop, en bracht in 1974 het album Autobahn uit?", 
+            new List<string> { "Tangerine Dream", "Can", "Neu!", "Kraftwerk" }, 
+            3
+        );
     }
  
     void SetDieren1()
     {
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level1, 
-            "Wat is het grootste levende dier op aarde?", 
-            new List<string> { "Afrikaanse Olifant", "Blauwe vinvis", "Reuzeninktvis", "De gele haarkwal" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level1, 
-            "Wat is het snelste landdier ter wereld?", 
-            new List<string> { "Tijger", "Jachtluipaard", "Paard", "Leeuw" }, 
-            1
-        );
-
         casinoData.AddQuestion(
             Subject.Dieren, 
             Level.Level1, 
@@ -345,6 +329,22 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Kieming", "Metamorfose", "Fotosynthese", "Vermenigvuldiging" }, 
             1
         );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level1, 
+            "Wat is het grootste levende dier op aarde?", 
+            new List<string> { "Afrikaanse Olifant", "Blauwe vinvis", "Reuzeninktvis", "De gele haarkwal" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level1, 
+            "Wat is het snelste landdier ter wereld?", 
+            new List<string> { "Tijger", "Jachtluipaard", "Paard", "Leeuw" }, 
+            1
+        );
     }
 
     void SetDieren2()
@@ -352,24 +352,8 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Dieren, 
             Level.Level2, 
-            "Wat is de langste geregistreerde levensduur van een Groenlandse haai, dat bekendstaat als een van de langst levende gewervelde dieren?", 
-            new List<string> { "90 jaar", "190 jaar", "290 jaar", "390 jaar" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level2, 
             "Welke giftige kwalsoort, staat bekend als een van de doodelijkste dieren op aarde, waarbij een mens geen overlevings kans heeft na vergiftiging?", 
             new List<string> { "Portugese oorlogsschip", "Australische Zeewesp", "Blauwe ringerige kwal", "Irukandji-kwal" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level2, 
-            "Welk zoogdier kan tot wel zes dagen onder water blijven zonder lucht te halen dankzij zijn grote longcapaciteit?", 
-            new List<string> { "Zeeotter", "Potvis", "Blauwe vinvis", "Zeekoe" }, 
             1
         );
         
@@ -428,6 +412,22 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Kolibrie", "Havik", "Arend", "Albatros" }, 
             0
         );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level2, 
+            "Wat is de langste geregistreerde levensduur van een Groenlandse haai, dat bekendstaat als een van de langst levende gewervelde dieren?", 
+            new List<string> { "90 jaar", "190 jaar", "290 jaar", "390 jaar" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level2, 
+            "Welk dier kan tot wel zes dagen onder water blijven zonder lucht te halen dankzij zijn grote longcapaciteit?", 
+            new List<string> { "Zeeotter", "Potvis", "Blauwe vinvis", "Zeekoe" }, 
+            1
+        );
     }
 
     void SetDieren3()
@@ -435,41 +435,17 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Dieren, 
             Level.Level3, 
-            "Welke schildpadsoort kan een vorm van winterslaap in modderig water overleven door zuurstof uit water via zijn cloaca op te nemen?", 
-            new List<string> { "Kaaimanschildpad", "Roodwangschildpad", "Australische bosschilpad", "Westelijke kousenbandshilpad" }, 
+            "Wat is het enige bekende dier dat zijn lichaamskleur permanent kan aanpassen aan de seizoenen door een speciaal proces van hormonale veranderingen?", 
+            new List<string> { "Poolvos", "Sneeuwuil", "Toendrahaas", "Berggeit" }, 
             0
         );
 
         casinoData.AddQuestion(
             Subject.Dieren, 
             Level.Level3, 
-            "Welk zoogdier heeft de hoogste lichaamstemperatuur in het dierenrijk, met een gemiddelde van ongeveer 41°C (105,8°F)?", 
-            new List<string> { "Noordse vleermuis", "Grijzewolf", "Goudkopleeuwaapje", "Huismus" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level3, 
-            "Welke inktvissoort kan licht produceren met behulp van bioluminescentie en heeft specifieke bacteriën die in speciale organen in zijn lichaam leven?", 
-            new List<string> { "Sepia", "Octopoteuthidae", "Hawaïaanse bobtailinktvis", "Metasepia pfefferi" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level3, 
-            "Welk insect is in staat om superkolonies te vormen die zich over duizenden kilometers uitstrekken en bestaat uit verschillende onderling verbonden nesten?", 
-            new List<string> { "Termieten", "Aziatische Rode mier", "Argentijnse mier", "Japanse hoornaar" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level3, 
-            "Welke hagedissensoort kan zich parthenogenetisch voortplanten, waarbij vrouwtjes klonen van zichzelf kunnen voortbrengen zonder de noodzaak van een mannetje?", 
-            new List<string> { "Arubaanse renhagedis", "Zevenstrepensalamander", "Amazonemurmellius", "Zebraskink" }, 
-            2
+            "Welke van de volgende dieren heeft een extreem zeldzaam “antifreeze”-eiwit in zijn bloed, dat voorkomt dat het bevriest bij temperaturen onder nul?", 
+            new List<string> { "Antarctische tandbaars", "Groenlandse haai", "Kabeljauw", "Zalm" }, 
+            0
         );
 
         casinoData.AddQuestion(
@@ -478,14 +454,6 @@ public class CreateQuestions : MonoBehaviour
             "Welk dier heeft een maagzuur met een pH-waarde van bijna 1, waardoor het botten en vlees kan verteren die voor andere dieren onverteerbaar zijn?", 
             new List<string> { "Komodovaraan", "Python", "Tasmaanse duivel", "Hyena" }, 
             3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Dieren, 
-            Level.Level3, 
-            "Wat is het enige bekende dier dat zijn lichaamskleur permanent kan aanpassen aan de seizoenen door een speciaal proces van hormonale veranderingen?", 
-            new List<string> { "Poolvos", "Sneeuwuil", "Toendrahaas", "Berggeit" }, 
-            0
         );
 
         casinoData.AddQuestion(
@@ -510,6 +478,38 @@ public class CreateQuestions : MonoBehaviour
             "Wat is het enige zoogdier dat zijn lichaamstemperatuur bijna volledig kan verlagen om energie te besparen?", 
             new List<string> { "Kameel", "Woestijnrat", "Amerikaanse zwarte beer", "Dromedaris" }, 
             0
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level3, 
+            "Welke schildpadsoort kan een vorm van winterslaap in modderig water overleven door zuurstof uit water via zijn cloaca op te nemen?", 
+            new List<string> { "Kaaimanschildpad", "Roodwangschildpad", "Australische bosschilpad", "Westelijke kousenbandshilpad" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level3, 
+            "Welk dier heeft de hoogste lichaamstemperatuur in het dierenrijk, met een gemiddelde van ongeveer 41°C?", 
+            new List<string> { "Noordse vleermuis", "Zwarte woestijnmier", "Kolibrie", "Sneeuwhaas" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level3, 
+            "Welke inktvissoort kan licht produceren met behulp van bioluminescentie en heeft specifieke bacteriën die in speciale organen in zijn lichaam leven?", 
+            new List<string> { "Sepia", "Octopoteuthidae", "Hawaïaanse bobtailinktvis", "Metasepia pfefferi" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.Dieren, 
+            Level.Level3, 
+            "Welk insect is in staat om superkolonies te vormen die zich over duizenden kilometers uitstrekken en bestaat uit verschillende onderling verbonden nesten?", 
+            new List<string> { "Termieten", "Aziatische Rode mier", "Argentijnse mier", "Japanse hoornaar" }, 
+            2
         );
     }
 
@@ -601,38 +601,6 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Voetbal, 
             Level.Level2, 
-            "In welk jaar vond de Miracle of Istanbul plaats, toen Liverpool een comeback maakte van 3-0 naar 3-3 in de UEFA Champions League finale?", 
-            new List<string> { "2002", "2003", "2004", "2005" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level2, 
-            "Welke speler was de eerste die meer dan 1000 professionele wedstrijden speelde voor één club in de Premier League?", 
-            new List<string> { "Frank Lampard", "Steven Gerrard", "Ryan Giggs", "Paul Scholes" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level2, 
-            "Welke club heeft de meeste keer de Coppa Italia gewonnen?", 
-            new List<string> { "AS Roma", "Juventus", "AC Milan", "Napoli" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level2, 
-            "Welke nationale ploeg behaalde als eerste de nummer 1-positie in de FIFA-ranglijst voor mannen?", 
-            new List<string> { "Brazilë", "Italië", "Nederland", "Duitsland" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level2, 
             "In welk jaar werd de UEFA Champions League voor het eerst gehouden onder de naam Champions League in plaats van Europese Cup?", 
             new List<string> { "1990", "1992", "1995", "1997" }, 
             1
@@ -685,10 +653,90 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Gerd Müller", "Robert Lewandowski", "Ulf Kirsten", "Klaus Fischer" }, 
             1
         );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level2, 
+            "In welk jaar vond de Miracle of Istanbul plaats, toen Liverpool een comeback maakte van 3-0 naar 3-3 in de UEFA Champions League finale?", 
+            new List<string> { "2002", "2003", "2004", "2005" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level2, 
+            "Welke speler was de eerste die meer dan 1000 professionele wedstrijden speelde voor één club in de Premier League?", 
+            new List<string> { "Frank Lampard", "Steven Gerrard", "Ryan Giggs", "Paul Scholes" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level2, 
+            "Welke club heeft de meeste keer de Coppa Italia gewonnen?", 
+            new List<string> { "AS Roma", "Juventus", "AC Milan", "Napoli" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level2, 
+            "Welke nationale ploeg behaalde als eerste de nummer 1-positie in de FIFA-ranglijst voor mannen?", 
+            new List<string> { "Brazilë", "Italië", "Nederland", "Duitsland" }, 
+            3
+        );
     }
 
     void SetVoetbal3()
     {
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Welk land is het enige dat de Olympische gouden medaille heeft gewonnen in het voetbal en het daarna nooit opnieuw heeft gedaan?", 
+            new List<string> { "Kosovo", "Tsjechoslowakije", "Soviet Unie", "West-Duitsland" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Welke speler scoorde het allereerste doelpunt ooit in een officiële UEFA Cup-wedstrijd (nu Europa League) in het seizoen 1971/72?", 
+            new List<string> { "Antonin Panenka", "Rainer Ohlhauser", "Willy Brokamp", "John Giles" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Welke speler uit de vroege jaren 1900 had het record voor het meeste aantal doelpunten gescoord in de hoogste Engelse divisie?", 
+            new List<string> { "Steve Bloomer", "Jimmy Greaves", "Dixie Dean", "Tommy Taylor" }, 
+            0   
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Wie was de allereerste speler die meer dan 500 doelpunten maakte in de Italiaanse Serie A?", 
+            new List<string> { "Alessandro Del Piero", "Roberto Baggio", "Francesco Totti", "Giuseppe Meazza" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Welk land heeft de meeste keer de FIFA Fair Play Trophy gewonnen?", 
+            new List<string> { "Duitsland", "Brazilië", "Engeland", "Frankrijk" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Voetbal, 
+            Level.Level3, 
+            "Welke club heeft het record voor het meeste aantal gespeelde seizoenen in de Engelse topdivisie zonder ooit te degraderen?", 
+            new List<string> { "Arsenal", "Everton", "Chelsea", "Leicester City" }, 
+            1
+        );
+
         casinoData.AddQuestion(
             Subject.Voetbal, 
             Level.Level3, 
@@ -720,58 +768,34 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "George Weah", "Dejan Savićević", "Hristo Stoichkov", "Jari Litmanen" }, 
             0
         );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Welk land is het enige dat de Olympische gouden medaille heeft gewonnen in het voetbal en het daarna nooit opnieuw heeft gedaan?", 
-            new List<string> { "Nederland", "Tsjechoslowakije", "Soviet Unie", "West-Duitsland" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Wie was de allereerste speler die meer dan 500 doelpunten maakte in de Italiaanse Serie A?", 
-            new List<string> { "Alessandro Del Piero", "Roberto Baggio", "Francesco Totti", "Giuseppe Meazza" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Welk land heeft de meeste keer de FIFA Fair Play Trophy gewonnen?", 
-            new List<string> { "Duitsland", "Brazilië", "Engeland", "Frankrijk" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Welke speler heeft de meeste wedstrijden gespeeld voor de Italiaanse nationale ploeg zonder ooit een doelpunt te maken?", 
-            new List<string> { "Gianluigi Buffon", "Fabio Cannavaro", "Daniele De Rossi", "Paolo Maldini" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Welke speler uit de vroege jaren 1900 had het record voor het meeste aantal doelpunten gescoord in de hoogste Engelse divisie?", 
-            new List<string> { "Steve Bloomer", "Jimmy Greaves", "Dixie Dean", "Tommy Taylor" }, 
-            0   
-        );
-
-        casinoData.AddQuestion(
-            Subject.Voetbal, 
-            Level.Level3, 
-            "Welke club heeft het record voor het meeste aantal gespeelde seizoenen in de Engelse topdivisie zonder ooit te degraderen?", 
-            new List<string> { "Arsenal", "Everton", "Chelsea", "Leicester City" }, 
-            1
-        );
     }
 
     void SetGeschiedenis1()
     {
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level1, 
+            "In welk jaar werd de Verenigde Naties opgericht?", 
+            new List<string> { "1918", "1945", "1955", "1975" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level1, 
+            "Wat was de naam van het schip waarmee de Engelse ontdekkingsreiziger James Cook de wereld rondvoer?", 
+            new List<string> { "Mayflower", "Endeavour", "Victoria", "Beagle" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level1, 
+            "Wie was de beroemde vrouw die tijdens de Amerikaanse Burgeroorlog het rode kruis oprichtte?", 
+            new List<string> { "Harriet Tubman", "Clara Barton", "Rosa Parks", "Eleanor Roosevelt" }, 
+            1
+        );
+
         casinoData.AddQuestion(
             Subject.Geschiedenis, 
             Level.Level1, 
@@ -783,7 +807,7 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Geschiedenis, 
             Level.Level1, 
-            "Welke oude beschaving bouwde de piramides in Egypte?", 
+            "Welke oude beschaving bouwde de piramides?", 
             new List<string> { "Romeinen", "Grieken", "Egyptenaren", "Mesopotamiërs" }, 
             2
         );
@@ -827,30 +851,6 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "België", "Frankrijk", "Duitsland", "Nederland" }, 
             0
         );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level1, 
-            "In welk jaar werd de Verenigde Naties opgericht?", 
-            new List<string> { "1918", "1945", "1955", "1975" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level1, 
-            "Wat was de naam van het schip waarmee de Engelse ontdekkingsreiziger James Cook de wereld rondvoer?", 
-            new List<string> { "Mayflower", "Endeavour", "Victoria", "Beagle" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level1, 
-            "Wie was de beroemde vrouw die tijdens de Amerikaanse Burgeroorlog het rode kruis oprichtte?", 
-            new List<string> { "Harriet Tubman", "Clara Barton", "Rosa Parks", "Eleanor Roosevelt" }, 
-            1
-        );
     }
 
     void SetGeschiedenis2()
@@ -858,9 +858,25 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Geschiedenis, 
             Level.Level2, 
-            "Jeanne d'Arc beweerde goddelijke leiding te ontvangen, naast de aartsengel Michaël, van welke andere heilige figuur?", 
-            new List<string> { "Saint-Lucas", "Saint-Eleanora", "Saint-Catharina", "Saint-Cethleann" }, 
-            2
+            "Wie was de uitvinder van de boekdrukkunst in Europa, bekend om zijn drukpers die de verspreiding van kennis bevorderde in de 15e eeuw?", 
+            new List<string> { "Johann Gutenberg", "William Caxton", "Nikolaus Copernicus", "Johannes Kepler" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level2, 
+            "In welke veldslag vesloeg Baldwin IV van Jeruzalem, Saladin in 1177, ondanks zijn ziekte en numerieke verschil van 5 tot 8 keer?", 
+            new List<string> { "Slag bij Hattin", "Slag bij Montgisard", "Slag bij Arsuf", "Slag bij La Forbie" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level2, 
+            "Welke beroemde Noorse ontdekkingsreiziger bereikte Noord-Amerika vijf eeuwen vóór Christoffel Columbus?", 
+            new List<string> { "Thorfinn Heyerdahl", "Thor Heyerdahl", "Roald Amundsen", "Leif Erikson" }, 
+            3
         );
 
         casinoData.AddQuestion(
@@ -898,14 +914,6 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Geschiedenis, 
             Level.Level2, 
-            "Wie was de uitvinder van de boekdrukkunst in Europa, bekend om zijn drukpers die de verspreiding van kennis bevorderde in de 15e eeuw?", 
-            new List<string> { "Johann Gutenberg", "Leonardo da Vinci", "Nikolaus Copernicus", "Johannes Kepler" }, 
-            0
-        );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level2, 
             "Wat was de eerste langdurige Europese koloniale bezetting in Afrika, die begon in de 15e eeuw?", 
             new List<string> { "Portugese bezittingen in Angola", "Spaanse bezittingen in Marokko", "Franse bezittingen in Senegal", "Portugese bezittingen in Guinea-Bissau" }, 
             0
@@ -926,42 +934,10 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Spanje", "Engeland", "Frankrijk", "Venetië" }, 
             0
         );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level2, 
-            "Welke beroemde Noorse ontdekkingsreiziger bereikte Noord-Amerika vijf eeuwen vóór Christoffel Columbus?", 
-            new List<string> { "Thorfinn Heyerdahl", "Thor Heyerdahl", "Roald Amundsen", "Leif Erikson" }, 
-            3
-        );
     }
 
     void SetGeschiedenis3()
     {
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level3, 
-            "Welke Keltische stam in Gallië werd bekend door hun georganiseerde weerstand tegen de Romeinse veroveringen, met Vercingetorix als leider?", 
-            new List<string> { "Helvetii", "Arverni", "Eburones", "Treveri" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level3, 
-            "Welk document wordt beschouwd als de oudste vredesverdrag ter wereld, afgesloten tussen het Egyptische Rijk en het Hettitische Rijk?", 
-            new List<string> { "Het Verdrag van Tordesillas", "Het Verdrag van Susa", "Het Verdrag van Kadesh", "Het Edict van Medinet Habu" }, 
-            2
-        );
-
-        casinoData.AddQuestion(
-            Subject.Geschiedenis, 
-            Level.Level3, 
-            "Welke Chinees admiraal leidde een reeks beroemde maritieme expedities door Zuidoost-Azië en Oost-Afrika tijdens de vroege Ming-dynastie?", 
-            new List<string> { "Kublai Khan", "Sun Tzu", "Zheng He", "Li Shimin" }, 
-            2
-        );
-
         casinoData.AddQuestion(
             Subject.Geschiedenis, 
             Level.Level3, 
@@ -1017,6 +993,31 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Thomas van Aquino", "Boëthius", "Averroës", "Abelard" }, 
             1
         );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level3, 
+            "Welke Keltische stam in Gallië werd bekend door hun georganiseerde weerstand tegen de Romeinse veroveringen, met Vercingetorix als leider?", 
+            new List<string> { "Helvetii", "Arverni", "Eburones", "Treveri" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level3, 
+            "Welk document wordt beschouwd als de oudste vredesverdrag ter wereld, afgesloten tussen het Egyptische Rijk en het Hettitische Rijk?", 
+            new List<string> { "Het Verdrag van Tordesillas", "Het Verdrag van Susa", "Het Verdrag van Kadesh", "Het Edict van Medinet Habu" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.Geschiedenis, 
+            Level.Level3, 
+            "Welke Chinees admiraal leidde een reeks beroemde maritieme expedities door Zuidoost-Azië en Oost-Afrika tijdens de vroege Ming-dynastie?", 
+            new List<string> { "Kublai Khan", "Sun Tzu", "Zheng He", "Li Shimin" }, 
+            2
+        );
+
     }
 
     void SetAstronomie1()
@@ -1107,30 +1108,6 @@ public class CreateQuestions : MonoBehaviour
         casinoData.AddQuestion(
             Subject.Astronomie, 
             Level.Level2, 
-            "Hoe wordt het punt genoemd waar een zwart gat de zwaartekracht zo sterk heeft dat zelfs licht er niet aan kan ontsnappen?", 
-            new List<string> { "Singulariteit", "Event horizon", "Schwarzschild-radius", "Neutrino Antimaterie" }, 
-            1
-        );
-
-        casinoData.AddQuestion(
-            Subject.Astronomie, 
-            Level.Level2, 
-            "Wat is de belangrijkste reden dat het oppervlak van Venus heter is dan dat van Mercurius, hoewel Mercurius dichter bij de Zon staat?", 
-            new List<string> { "Venus heeft een dichte atmosfeer vol CO₂", "Venus draait langzamer rond haar as", "Venus heeft een sterke magnetosfeer", "Venus heeft een grotere massa dan Mercurius" }, 
-            0
-        );
-
-        casinoData.AddQuestion(
-            Subject.Astronomie, 
-            Level.Level2, 
-            "Wat is de naam van de zone in ons zonnestelsel waar kleine, ijzige objecten in een schijfvormige regio zich bevinden, voorbij de baan van Neptunus?", 
-            new List<string> { "Oortwolk", "Asteroïdengordel", "Heliopauze", "Kuipergordel" }, 
-            3
-        );
-
-        casinoData.AddQuestion(
-            Subject.Astronomie, 
-            Level.Level2, 
             "Welke ster is de helderste ster in het sterrenbeeld Orion?", 
             new List<string> { "Rigel", "Betelgeuze", "Bellatrix", "Alnilam" }, 
             0
@@ -1183,42 +1160,34 @@ public class CreateQuestions : MonoBehaviour
             new List<string> { "Supernova-restanten", "Planetaire nevels", "Moleculaire wolken", "Kosmische jets" }, 
             0
         );
-    }
 
-    void SetAstronomie3()
-    {
-        casinoData.AddQuestion(
+                casinoData.AddQuestion(
             Subject.Astronomie, 
-            Level.Level3, 
-            "Wat is de naam van de hypothese die stelt dat ons zonnestelsel een ster van het type “Primordial Black Hole” bevat als onontdekt object?", 
-            new List<string> { "Planeta 9-hypothese", "Nibiru-theorie", "Nemesis-hypothese", "Primordial-hypothese" }, 
-            0
-        );
-
-        casinoData.AddQuestion(
-            Subject.Astronomie, 
-            Level.Level3, 
-            "Wat beschrijft het concept van de “Big Rip” in kosmologie?", 
-            new List<string> { "Het moment waarop zwaartekracht sterker wordt dan donkere energie", "Het uiteenvallen van ruimte en tijd door exponentiële expansie", "De samensmelting van het universum in één punt", "Een supernova-explosie die het universum zou vernietigen" }, 
+            Level.Level2, 
+            "Hoe wordt het punt genoemd waar een zwart gat de zwaartekracht zo sterk heeft dat zelfs licht er niet aan kan ontsnappen?", 
+            new List<string> { "Singulariteit", "Event horizon", "Schwarzschild-radius", "Neutrino Antimaterie" }, 
             1
         );
 
         casinoData.AddQuestion(
             Subject.Astronomie, 
-            Level.Level3, 
-            "Wat betekent de afkorting “LIGO”?", 
-            new List<string> { "Laser Interferometer Gravitational Observatory", "Light Infrared Gamma-ray Observatory", "Large Interstellar Gamma Oscillation", "Long Integration Gravitational Opacity" }, 
+            Level.Level2, 
+            "Wat is de belangrijkste reden dat het oppervlak van Venus heter is dan dat van Mercurius, hoewel Mercurius dichter bij de Zon staat?", 
+            new List<string> { "Venus heeft een dichte atmosfeer vol CO₂", "Venus draait langzamer rond haar as", "Venus heeft een sterke magnetosfeer", "Venus heeft een grotere massa dan Mercurius" }, 
             0
         );
 
         casinoData.AddQuestion(
             Subject.Astronomie, 
-            Level.Level3, 
-            "Wat is de belangrijkste oorzaak van gammaflitsen die honderden miljoenen lichtjaren ver kunnen reiken en extreem krachtige energie vrijmaken?", 
-            new List<string> { "Botsingen tussen neutronensterren", "Ontploffing van superzware sterren", "Samentrekking van sterrem", "Jetuitbarstingen in zwarte gaten" }, 
-            0
+            Level.Level2, 
+            "Wat is de naam van de zone in ons zonnestelsel waar kleine, ijzige objecten in een schijfvormige regio zich bevinden, voorbij de baan van Neptunus?", 
+            new List<string> { "Oortwolk", "Asteroïdengordel", "Heliopauze", "Kuipergordel" }, 
+            3
         );
+    }
 
+    void SetAstronomie3()
+    {
         casinoData.AddQuestion(
             Subject.Astronomie, 
             Level.Level3, 
@@ -1264,6 +1233,38 @@ public class CreateQuestions : MonoBehaviour
             Level.Level3, 
             "Wat is de naam van het verre sterrenstelsel dat bekend staat als het eerste sterrenstelsel waarvan een gammaflits is waargenomen?", 
             new List<string> { "GRB 090423", "GN-z11", "IOK-1", "MACS0647-JD" }, 
+            0
+        );
+
+                casinoData.AddQuestion(
+            Subject.Astronomie, 
+            Level.Level3, 
+            "Wat is de naam van de hypothese die stelt dat ons zonnestelsel een ster van het type “Primordial Black Hole” bevat als onontdekt object?", 
+            new List<string> { "Planeta 9-hypothese", "Nibiru-theorie", "Nemesis-hypothese", "Primordial-hypothese" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.Astronomie, 
+            Level.Level3, 
+            "Wat beschrijft het concept van de “Big Rip” in kosmologie?", 
+            new List<string> { "Het moment waarop zwaartekracht sterker wordt dan donkere energie", "Het uiteenvallen van ruimte en tijd door exponentiële expansie", "De samensmelting van het universum in één punt", "Een supernova-explosie die het universum zou vernietigen" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.Astronomie, 
+            Level.Level3, 
+            "Wat betekent de afkorting “LIGO”?", 
+            new List<string> { "Laser Interferometer Gravitational Observatory", "Light Infrared Gamma-ray Observatory", "Large Interstellar Gamma Oscillation", "Long Integration Gravitational Opacity" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.Astronomie, 
+            Level.Level3, 
+            "Wat is de belangrijkste oorzaak van gammaflitsen die honderden miljoenen lichtjaren ver kunnen reiken en extreem krachtige energie vrijmaken?", 
+            new List<string> { "Botsingen tussen neutronensterren", "Ontploffing van superzware sterren", "Samentrekking van sterrem", "Jetuitbarstingen in zwarte gaten" }, 
             0
         );
     }
@@ -1509,6 +1510,255 @@ public class CreateQuestions : MonoBehaviour
         );
     }
 
+    void SetOverigeSporten1()
+    {
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Welke sport combineert skiën en schieten?", 
+            new List<string> { "Snowboarden", "Biatlon", "Triatlon", "Langlaufen" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Hoeveel spelers staan er standaard op het veld bij een volleybalteam?", 
+            new List<string> { "5", "6", "7", "8" }, 
+            1
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Welke kleur kaart krijg je in tennis als je een fout maakt?", 
+            new List<string> { "Geel", "Rood", "Tennis kent geen kaarten", "Blauw" }, 
+            2
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Hoeveel punten krijg je voor een try in rugby?", 
+            new List<string> { "3", "4", "5", "6" }, 
+            1
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Welke van deze sporten gebruikt een puck?", 
+            new List<string> { "IJshockey", "Waterpolo", "Squash", "Handbal" }, 
+            0
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "In badminton, hoe heet het wanneer je direct de shuttle over het net slaat zodat je tegenstander hem niet kan raken?", 
+            new List<string> { "Smash", "Drop", "Lob", "Serve" }, 
+            0
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Hoeveel doelpunten telt een basketbalteam per basket?", 
+            new List<string> { "1 of 2", "2 of 3", "1 of 3", "1, 2 of 3" }, 
+            3
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Welke sport wordt beoefend op een paard en combineert dressuur, springen en cross-country?", 
+            new List<string> { "Polo", "Eventing", "Springconcours", "Fullcourse" }, 
+            1
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "In welke sport is Usain Bolt wereldberoemd geworden?", 
+            new List<string> { "Zwemmen", "Atletiek", "Gymnastiek", "Wielrennen" }, 
+            1
+        );
+        
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level1, 
+            "Hoeveel spelers zwemmen er in een waterpoloteam in het water tijdens een wedstrijd?", 
+            new List<string> { "5", "6", "7", "8" }, 
+            2
+        );
+    }
+
+    void SetOverigeSporten2()
+    {
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Wat is de minimale toegestane reactie-tijd voor een start in een 100 meter sprint bij internationale wedstrijden?", 
+            new List<string> { "0.05 secondes", "0.10 secondes", "0.15 secondes", "0.20 secondes" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Welke autosportcategorie werd in 1986 wereldwijd verboden vanwege het extreem hoge risico op dodelijke ongelukken voor zowel coureurs als toeschouwers?", 
+            new List<string> { "Wangan midnight race", "Peak's Mountain downhill", "LeMans prototype", "Group B rally" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Welke bochtpositie is verplicht om te behouden tijdens het short-track schaatsen om diskwalificatie te voorkomen?", 
+            new List<string> { "Buitenbocht rechterbeen naar buiten", "Buitenbocht hand op knie", "Binnenbocht rechterbeen naar buiten", "Binnenbocht hand op knie" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Bij de schoolslag is er een specifieke regel voor de benen. Welke beweging is niet toegestaan?", 
+            new List<string> { "Een dolphin kick", "Een frog kick", "Een whip kick", "Een flutter kick" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Bij waterpolo, wat is de maximale tijd die een speler het balbezit mag hebben zonder te schieten of passen?", 
+            new List<string> { "20 secondes", "25 secondes", "30 secondes", "35 secondes" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Wat is de moeilijkheidsgraad van een oefening die een dubbele salto met twist bevat in turnen op de vloer volgens de FIG-code?", 
+            new List<string> { "E", "F", "G", "H" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Wie had in het seizoen 2022–2023 het hoogste gemiddelde aantal assists per wedstrijd in de NBA?", 
+            new List<string> { "LeBron James", "James Harden", "Chris Paul", "Terry Rose" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "In judo, hoeveel waza-ari scores zijn nodig om een wedstrijd te winnen zonder ippon?", 
+            new List<string> { "1", "2", "3", "4" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Wat betekent het “starboard right-of-way” principe in zeilen?", 
+            new List<string> { "Boot aan bakboord gaat voor", "Boot aan stuurboord gaat voor", "Boot die achter ligt gaat voor", "Boot die voor ligt moet stoppen" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level2, 
+            "Hoeveel schijven moet een biatleet raken tijdens een staande schietronde van vijf schoten?", 
+            new List<string> { "3", "5", "7", "9" }, 
+            1
+        );
+    }
+
+    void SetOverigeSporten3()
+    {
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Wat is de maximale hellingshoek van een skihelling die wordt gebruikt voor Olympische alpineskiën?", 
+            new List<string> { "30 graden", "35 graden", "40 graden", "45 graden" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Welke biomechanische factor is het meest cruciaal voor het genereren van kracht tijdens een 100 meter sprint?", 
+            new List<string> { "Stapfrequentie", "Staplengte", "Grondreactie", "Lichaamshoek" }, 
+            2
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Welke fysiologische aanpassing treedt op bij duursporters na langdurige training op grote hoogte?", 
+            new List<string> { "Verhoogde bloedcellen", "Verhoogde spiermassa", "Verbeterde anaerobe capaciteit", "Verhoogde vetverbranding" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Welke regel maakt dat een aanval in het sabre-schermen direct geldig is bij contact, wannneer de tegenstander ook een aanval starte op hetzelfde moment?", 
+            new List<string> { "Prioriteitsregel", "Timingregel", "Touchregel", "Counterregel" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Welke vrouwelijke turnster was de eerste ooit die een perfect 10 kreeg op de Olympische Spelen in 1976?", 
+            new List<string> { "Olga Korbut", "Larisa Latynina", "Simone Biles", "Nadia Comăneci" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Wat is een “freeze” in curling?", 
+            new List<string> { "De steen stopt exact tegen de achterste steen aan", "De steen blijft op de hog line liggen", "De steen wordt volledig geblokkeerd door een andere steen", "De steen wordt verwijderd van het huis" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Bij Olympisch boksen mogen deelnemers vanaf welk jaar maximaal 3 minuten per ronde boksen?", 
+            new List<string> { "Vanaf 16 jaar", "Vanaf 17 jaar", "Vanaf 18 jaar", "Vanaf 19 jaar" }, 
+            1
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Wat is het maximale aantal pogingen dat een klimmer heeft voor één boulderprobleem bij een internationale wedstrijd?", 
+            new List<string> { "4", "5", "6", "Geen limiet" }, 
+            3
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Wie was de eerste man die ooit meer dan 500 kg totaal tilde in een gewichtheflingwedstrijd?", 
+            new List<string> { "Vasily Alekseyev", "Naim Süleymanoğlu", "Leonid Taranenko", "Pyrros Dimas" }, 
+            0
+        );
+
+        casinoData.AddQuestion(
+            Subject.OverigeSporten, 
+            Level.Level3, 
+            "Hoe lang duurt een standaard polowedstrijd?", 
+            new List<string> { "4 chuckers van 15 minuten", "6 chukkers van 7 minuten", "8 chukkers van 10 minuten", "3 chukkers van 20 minuten" }, 
+            1
+        );
+    }
+
     public void Load()
     {
         casinoData = this.gameObject.GetComponent<CasinoData>();
@@ -1536,5 +1786,9 @@ public class CreateQuestions : MonoBehaviour
         SetWetenschap1();
         SetWetenschap2();
         SetWetenschap3();
+
+        SetOverigeSporten1();
+        SetOverigeSporten2();
+        SetOverigeSporten3();
     }
 }

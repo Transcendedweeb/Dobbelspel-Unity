@@ -11,7 +11,8 @@ public class CasinoData : MonoBehaviour
         Muziek,
         Geschiedenis,
         Astronomie,
-        Wetenschap
+        Wetenschap,
+        OverigeSporten
     }
 
     public enum Level

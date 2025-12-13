@@ -13,16 +13,15 @@ public class SetCasinoSelections : MonoBehaviour
     int bronzeIndex;
     int silverIndex;
     int goldIndex;
-    bool hasRolled = false; // Prevent double initialization
+    bool hasRolled = false;
 
     void Start()
     {
-        Roll(); // Roll() now has its own guard
+        Roll();
     }
 
     void Roll()
     {
-        // Prevent double execution
         if (hasRolled)
         {
             return;
@@ -40,7 +39,6 @@ public class SetCasinoSelections : MonoBehaviour
             return;
         }
 
-        // Mark as rolled before proceeding
         hasRolled = true;
 
         List<int> rolledNumbers = GenerateUniqueRandomNumbers(0, subjects.Length-1, 3);
@@ -76,20 +74,17 @@ public class SetCasinoSelections : MonoBehaviour
     {
         List<int> numbers = new List<int>();
 
-        // Ensure we don't request more numbers than available
         int availableCount = max - min + 1;
         if (count > availableCount)
         {
             count = availableCount;
         }
 
-        // Add all numbers from min to max (inclusive)
         for (int i = min; i <= max; i++)
         {
             numbers.Add(i);
         }
 
-        // Fisher-Yates shuffle algorithm
         for (int i = 0; i < numbers.Count; i++)
         {
             int randomIndex = Random.Range(i, numbers.Count);
@@ -98,7 +93,6 @@ public class SetCasinoSelections : MonoBehaviour
             numbers[randomIndex] = temp;
         }
 
-        // Return the first 'count' numbers
         return numbers.GetRange(0, count);
     }
 }

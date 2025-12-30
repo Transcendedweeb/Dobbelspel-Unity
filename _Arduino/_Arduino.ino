@@ -54,7 +54,7 @@ byte rng = 0;
 byte lastRng = 0;
 byte shuffleCounter = 0;
 bool  shuffle = true;
-int Larray[7][64] = {
+int Larray[11][64] = {
   {
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
@@ -131,6 +131,50 @@ int Larray[7][64] = {
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   },
+
+  {
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 1, 1, 0,
+  0, 0, 0, 0, 0, 0, 1, 0,
+  0, 0, 0, 0, 0, 0, 1, 0,
+  0, 1, 1, 1, 1, 1, 1, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  },
+
+  {
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 1, 1, 0, 1, 1, 0,
+  0, 1, 0, 0, 1, 0, 0, 1,
+  0, 1, 0, 0, 1, 0, 0, 1,
+  0, 0, 1, 1, 0, 1, 1, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  },
+
+  {
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 1, 0,
+  0, 0, 0, 1, 0, 0, 1, 0,
+  0, 1, 1, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  },
+
+  {
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 1, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 1, 1, 0, 0, 0,
+  0, 0, 1, 0, 0, 1, 0, 0,
+  0, 0, 1, 0, 0, 1, 0, 0,
+  0, 0, 0, 1, 1, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  }
 };
 
 void setup() {
@@ -219,11 +263,11 @@ void loop() {
   String joystickMsg = ""; // To hold the message of the first active joystick
 
   for (int i = 0; i < 4; i++) { // Loop through all 4 joysticks
-    // int xValue = analogRead(VRx[i]);
-    // int yValue = analogRead(VRy[i]);
+    int xValue = analogRead(VRx[i]);
+    int yValue = analogRead(VRy[i]);
 
-    int xValue = analogRead(A0);
-    int yValue = analogRead(A1);
+    // int xValue = analogRead(A0);
+    // int yValue = analogRead(A1);
 
     if (xValue < 400) joystickMsg = "Left";
     else if (xValue > 600) joystickMsg = "Right";
@@ -300,7 +344,7 @@ void ShowCurrentLed() {
 
 void GetRandomNumber() {
   while (true) {
-    rng = random(1, 7);
+    rng = random(1, 11);
     if (rng != lastRng) {
       lastRng = rng;
       break;
